@@ -1,68 +1,98 @@
-import { Component } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
-import { Contract } from 'src/app/models/interfaces/Contract';
-import { ContractService } from 'src/app/services/contracts/contract.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-contract',
-  imports: [MatTableModule, MatButtonModule, MatIconModule],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatCheckboxModule,
+    MatButtonModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
   templateUrl: './contract.component.html',
   styleUrl: './contract.component.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ContractComponent {
-  displayedColumns: string[] = ['id', 'name', 'signDate', 'status', 'actions'];
-  contracts: Contract[] = [
-    {
-      id: 'VT001',
-      name: 'Long',
-      signDate: '23423',
-      status: 'Active',
-    },
+  deleteContract(_t126: any) {
+    throw new Error('Method not implemented.');
+  }
+  viewContract(_t126: any) {
+    throw new Error('Method not implemented.');
+  }
+  editContract(_t126: any) {
+    throw new Error('Method not implemented.');
+  }
+  openAddDialog() {
+    throw new Error('Method not implemented.');
+  }
+  displayedColumns: string[] = [
+    'select',
+    'id',
+    'contractName',
+    'status',
+    'actions',
   ];
+  dataSource: MatTableDataSource<any>;
+  selection = new SelectionModel<any>(true, []);
 
-  constructor(private contractService: ContractService) {}
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  constructor() {
+    this.dataSource = new MatTableDataSource();
+  }
 
   ngOnInit() {
-    this.loadContracts();
+    // Load your data here
   }
 
-  loadContracts() {
-    this.contractService.getContracts().subscribe((data) => {
-      this.contracts = data;
-    });
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
-  openAdd() {
-    // Mở dialog hoặc chuyển sang form thêm mới
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
   }
 
-  editContract(contract: Contract) {
-    // Mở dialog sửa
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.dataSource.data.forEach((row) => this.selection.select(row));
   }
 
-  deleteContract(contract: Contract) {
-    if (confirm('Bạn có chắc muốn xoá hợp đồng này?')) {
-      // Gọi API xóa và reload danh sách
+  getStatusClass(status: string): string {
+    // Return appropriate CSS class based on status
+    switch (status.toLowerCase()) {
+      case 'completed':
+        return 'status-completed';
+      case 'in progress':
+        return 'status-progress';
+      case 'pending':
+        return 'status-pending';
+      default:
+        return '';
     }
-  }
-
-  viewDetail(contract: Contract) {
-    // Mở dialog xem chi tiết + history log
-  }
-
-  exportToExcel() {
-    this.contractService.exportContracts().subscribe((blob) => {
-      const file = new Blob([blob], {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      });
-      const url = window.URL.createObjectURL(file);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'contracts.xlsx';
-      a.click();
-      window.URL.revokeObjectURL(url);
-    });
   }
 }

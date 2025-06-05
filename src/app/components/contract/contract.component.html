@@ -1,63 +1,155 @@
-<div class="card p-4">
-  <div class="flex justify-between items-center mb-4">
-    <h2 class="text-xl font-bold">Danh sách hợp đồng</h2>
-    <button mat-raised-button color="primary" (click)="openAdd()">
-      <mat-icon class="mr-1">add</mat-icon> Thêm mới
-    </button>
+<div class="row">
+  <!-- Summary Cards -->
+  <div class="col-sm-6 col-lg-3">
+    <mat-card class="cardWithShadow cursor-pointer bg-light-primary">
+      <mat-card-content class="d-flex align-items-center gap-16">
+        <div
+          class="icon icon-38 rounded d-flex align-items-center justify-content-center bg-primary text-white"
+        >
+          <i-tabler name="list-details" class="icon-24"></i-tabler>
+        </div>
+        <div class="info">
+          <h5 class="f-w-400 f-s-14">Total</h5>
+          <h5 class="f-w-500 f-s-14">7 contracts</h5>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 
-  <table mat-table [dataSource]="contracts" class="mat-elevation-z1 w-full">
-    <!-- ID Column -->
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef>ID</th>
-      <td mat-cell *matCellDef="let contract">{{ contract.id }}</td>
-    </ng-container>
+  <div class="col-sm-6 col-lg-3">
+    <mat-card class="cardWithShadow cursor-pointer bg-light-secondary">
+      <mat-card-content class="d-flex align-items-center gap-16">
+        <div
+          class="icon icon-38 rounded d-flex align-items-center justify-content-center bg-secondary text-white"
+        >
+          <i-tabler name="shopping-bag" class="icon-24"></i-tabler>
+        </div>
+        <div class="info">
+          <h5 class="f-w-400 f-s-14">In Progress</h5>
+          <h5 class="f-w-500 f-s-14">3 contracts</h5>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Tên</th>
-      <td mat-cell *matCellDef="let contract">{{ contract.name }}</td>
-    </ng-container>
+  <div class="col-sm-6 col-lg-3">
+    <mat-card class="cardWithShadow cursor-pointer bg-light-success">
+      <mat-card-content class="d-flex align-items-center gap-16">
+        <div
+          class="icon icon-38 rounded d-flex align-items-center justify-content-center bg-success text-white"
+        >
+          <i-tabler name="check" class="icon-24"></i-tabler>
+        </div>
+        <div class="info">
+          <h5 class="f-w-400 f-s-14">Completed</h5>
+          <h5 class="f-w-500 f-s-14">3 contracts</h5>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 
-    <!-- Sign Date Column -->
-    <ng-container matColumnDef="signDate">
-      <th mat-header-cell *matHeaderCellDef>Ngày ký</th>
-      <td mat-cell *matCellDef="let contract">{{ contract.signDate }}</td>
-    </ng-container>
-
-    <!-- Status Column -->
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef>Trạng thái</th>
-      <td mat-cell *matCellDef="let contract">{{ contract.status }}</td>
-    </ng-container>
-
-    <!-- Actions Column -->
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef class="text-center">Thao tác</th>
-      <td mat-cell *matCellDef="let contract" class="flex gap-2 justify-center">
-        <button mat-icon-button color="primary" (click)="viewDetail(contract)">
-          <mat-icon>visibility</mat-icon>
-        </button>
-        <button mat-icon-button color="accent" (click)="editContract(contract)">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" (click)="deleteContract(contract)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </td>
-    </ng-container>
-
-    <tr
-      mat-header-row
-      *matHeaderRowDef="displayedColumns"
-      class="bg-gray-50"
-    ></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
-
-  <div class="mt-4 flex justify-end">
-    <button mat-stroked-button color="primary" (click)="exportToExcel()">
-      <mat-icon class="mr-1">download</mat-icon> Xuất Excel
-    </button>
+  <div class="col-sm-6 col-lg-3">
+    <mat-card class="cardWithShadow cursor-pointer bg-light-warning">
+      <mat-card-content class="d-flex align-items-center gap-16">
+        <div
+          class="icon icon-38 rounded d-flex align-items-center justify-content-center bg-warning text-white"
+        >
+          <i-tabler name="alert-triangle" class="icon-24"></i-tabler>
+        </div>
+        <div class="info">
+          <h5 class="f-w-400 f-s-14">Pending</h5>
+          <h5 class="f-w-500 f-s-14">1 contract</h5>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>
+
+<!-- Contract List -->
+<mat-card class="cardWithShadow mt-4">
+  <mat-card-content>
+    <!-- Search and Add Button -->
+    <div class="row justify-content-between align-items-center mb-3">
+      <div class="col-sm-4">
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput placeholder="Search Contract" #searchInput />
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-4 d-flex justify-content-end">
+        <button mat-flat-button color="primary" (click)="openAddDialog()">
+          Add Contract
+        </button>
+      </div>
+    </div>
+
+    <!-- Contract Table -->
+    <table mat-table [dataSource]="dataSource" matSort class="w-100">
+      <!-- Checkbox Column -->
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-checkbox
+            (change)="$event ? masterToggle() : null"
+            [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()"
+          >
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox
+            (click)="$event.stopPropagation()"
+            (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)"
+          >
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+      </ng-container>
+
+      <!-- Contract Name Column -->
+      <ng-container matColumnDef="contractName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Contract Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.contractName }}</td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let element">
+          <span class="status-badge" [ngClass]="getStatusClass(element.status)">
+            {{ element.status }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button (click)="editContract(element)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="viewContract(element)">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button (click)="deleteContract(element)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 25]"
+      showFirstLastButtons
+    ></mat-paginator>
+  </mat-card-content>
+</mat-card>
