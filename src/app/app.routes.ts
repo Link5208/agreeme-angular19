@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
 import { AddContractComponent } from './components/contract/add-contract/add-contract.component';
+import { EditContractComponent } from './components/contract/edit-contract/edit-contract.component';
 
 export const routes: Routes = [
   {
@@ -28,6 +29,17 @@ export const routes: Routes = [
       {
         path: 'contract/add',
         component: AddContractComponent,
+      },
+      {
+        path: 'contract/edit/:id',
+        component: EditContractComponent,
+        data: {
+          reuseComponent: false,
+          loadChildren: () =>
+            import(
+              './components/contract/edit-contract/edit-contract.component'
+            ).then((m) => m.EditContractComponent),
+        },
       },
       {
         path: 'ui-components',

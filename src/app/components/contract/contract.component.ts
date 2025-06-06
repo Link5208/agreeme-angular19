@@ -38,8 +38,8 @@ export class ContractComponent {
   viewContract(_t126: any) {
     throw new Error('Method not implemented.');
   }
-  editContract(_t126: any) {
-    throw new Error('Method not implemented.');
+  editContract(contract: Contract) {
+    this.router.navigate(['/contract/edit', contract.id]);
   }
   openAddDialog() {
     this.router.navigate(['/contract/add']);
@@ -59,30 +59,35 @@ export class ContractComponent {
       name: 'Software Development Contract',
       signDate: '2024-01-01',
       status: 'LIQUIDATED',
+      items: [],
     },
     {
       id: '2',
       name: 'IT Consulting Services',
       signDate: '2023-06-01',
       status: 'LIQUIDATED',
+      items: [],
     },
     {
       id: '3',
       name: 'Hardware Supply Agreement',
       signDate: '2024-03-01',
       status: 'LIQUIDATED',
+      items: [],
     },
     {
       id: '4',
       name: 'Cloud Services Agreement',
       signDate: '2024-02-01',
       status: 'UNILIQUIDATED',
+      items: [],
     },
     {
       id: '5',
       name: 'Maintenance Contract',
       signDate: '2023-01-01',
       status: 'UNILIQUIDATED',
+      items: [],
     },
   ];
   dataSource: MatTableDataSource<any>;

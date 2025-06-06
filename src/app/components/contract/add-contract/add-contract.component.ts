@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -28,7 +27,6 @@ import { MatDividerModule } from '@angular/material/divider';
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
-    MatLabel,
   ],
   templateUrl: './add-contract.component.html',
   styleUrl: './add-contract.component.scss',
@@ -62,10 +60,49 @@ export class AddContractComponent {
 
   createItem(): FormGroup {
     return this.fb.group({
-      itemName: ['', Validators.required],
-      unitPrice: [0, [Validators.required, Validators.min(0)]],
+      id: [{ value: null, disabled: true }],
+      name: ['', Validators.required],
+      unit: ['', Validators.required],
+      price: [0, [Validators.required, Validators.min(0)]],
       quantity: [1, [Validators.required, Validators.min(1)]],
+      total: [{ value: 0, disabled: true }],
     });
+  }
+
+  calculateItemTotal(price: number, quantity: number): number {
+    return price * quantity;
+  }
+
+  updateItemTotal(index: number) {
+    const item = this.items.at(index);
+    const price = item.get('price')?.value || 0;
+    const quantity = item.get('quantity')?.value || 0;
+    const total = this.calculateItemTotal(price, quantity);
+    item.patchValue({ total: total }, { emitEvent: false });
+  }
+
+  calculateSubTotal(): number {
+    return this.items.controls.reduce((total, item) => {
+      const itemValue = item.getRawValue();
+      return (
+        total + this.calculateItemTotal(itemValue.price, itemValue.quantity)
+      );
+    }, 0);
+  }
+
+  onSubmit() {
+    if (this.contractForm.valid) {
+      const formValue = {
+        ...this.contractForm.getRawValue(),
+        items: this.items.getRawValue().map((item) => ({
+          ...item,
+          total: this.calculateItemTotal(item.price, item.quantity),
+        })),
+      };
+      console.log('New contract:', formValue);
+      // TODO: Add API call to save contract
+      this.router.navigate(['/contract']);
+    }
   }
 
   addItem() {
@@ -76,30 +113,12 @@ export class AddContractComponent {
     this.items.removeAt(index);
   }
 
-  calculateItemTotal(item: any): number {
-    return item.unitPrice * item.quantity;
-  }
-
-  calculateSubTotal(): number {
-    return this.items.controls.reduce(
-      (total, item) => total + this.calculateItemTotal(item.value),
-      0
-    );
-  }
-
   calculateTax(): number {
     return this.calculateSubTotal() * (this.taxRate / 100);
   }
 
   calculateTotal(): number {
     return this.calculateSubTotal() + this.calculateTax();
-  }
-
-  onSubmit() {
-    if (this.contractForm.valid) {
-      console.log(this.contractForm.value);
-      // TODO: Add your save logic here
-    }
   }
 
   onCancel() {
