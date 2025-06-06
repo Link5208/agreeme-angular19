@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Contract } from 'src/app/models/interfaces/Contract';
 import { Router } from '@angular/router';
+import { ContractService } from 'src/app/services/contracts/contract.service';
 
 @Component({
   selector: 'app-contract',
@@ -35,8 +36,8 @@ export class ContractComponent {
   deleteContract(_t126: any) {
     throw new Error('Method not implemented.');
   }
-  viewContract(_t126: any) {
-    throw new Error('Method not implemented.');
+  viewContract(contract: Contract) {
+    this.router.navigate(['/contract/view', contract.id]);
   }
   editContract(contract: Contract) {
     this.router.navigate(['/contract/edit', contract.id]);
@@ -53,43 +54,7 @@ export class ContractComponent {
     'actions',
   ];
 
-  EXAMPLE_DATA: Contract[] = [
-    {
-      id: '1',
-      name: 'Software Development Contract',
-      signDate: '2024-01-01',
-      status: 'LIQUIDATED',
-      items: [],
-    },
-    {
-      id: '2',
-      name: 'IT Consulting Services',
-      signDate: '2023-06-01',
-      status: 'LIQUIDATED',
-      items: [],
-    },
-    {
-      id: '3',
-      name: 'Hardware Supply Agreement',
-      signDate: '2024-03-01',
-      status: 'LIQUIDATED',
-      items: [],
-    },
-    {
-      id: '4',
-      name: 'Cloud Services Agreement',
-      signDate: '2024-02-01',
-      status: 'UNILIQUIDATED',
-      items: [],
-    },
-    {
-      id: '5',
-      name: 'Maintenance Contract',
-      signDate: '2023-01-01',
-      status: 'UNILIQUIDATED',
-      items: [],
-    },
-  ];
+  EXAMPLE_DATA: Contract[] = [];
   dataSource: MatTableDataSource<any>;
   selection = new SelectionModel<any>(true, []);
   totalContracts: number = 0;
@@ -100,19 +65,28 @@ export class ContractComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private router: Router) {
-    this.dataSource = new MatTableDataSource(this.EXAMPLE_DATA);
+  constructor(
+    private router: Router,
+    private contractService: ContractService
+  ) {
+    this.dataSource = new MatTableDataSource<Contract>([]);
   }
 
   ngOnInit() {
     // Update summary cards
-    this.totalContracts = this.EXAMPLE_DATA.length;
-    this.inProgressContracts = this.EXAMPLE_DATA.filter(
-      (c) => c.status === 'UNILIQUIDATED'
-    ).length;
-    this.completedContracts = this.EXAMPLE_DATA.filter(
-      (c) => c.status === 'LIQUIDATED'
-    ).length;
+    this.contractService.getAllContracts().subscribe((contracts) => {
+      this.EXAMPLE_DATA = contracts;
+      this.dataSource.data = this.EXAMPLE_DATA;
+
+      // Update summary cards
+      this.totalContracts = this.EXAMPLE_DATA.length;
+      this.inProgressContracts = this.EXAMPLE_DATA.filter(
+        (c) => c.status === 'UNILIQUIDATED'
+      ).length;
+      this.completedContracts = this.EXAMPLE_DATA.filter(
+        (c) => c.status === 'LIQUIDATED'
+      ).length;
+    });
   }
 
   ngAfterViewInit() {

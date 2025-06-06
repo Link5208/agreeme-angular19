@@ -57,9 +57,9 @@ export class EditContractComponent {
 
   createForm() {
     this.contractForm = this.fb.group({
-      id: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
-      name: ['', Validators.required],
-      signDate: ['', Validators.required],
+      id: [{ value: '', disabled: true }],
+      name: [{ value: '', disabled: true }],
+      signDate: [{ value: '', disabled: true }],
       status: ['', Validators.required],
       items: this.fb.array([]),
     });

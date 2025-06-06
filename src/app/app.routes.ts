@@ -3,6 +3,7 @@ import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
 import { AddContractComponent } from './components/contract/add-contract/add-contract.component';
 import { EditContractComponent } from './components/contract/edit-contract/edit-contract.component';
+import { ContractViewComponent } from './components/contract/contract-view/contract-view.component';
 
 export const routes: Routes = [
   {
@@ -40,6 +41,10 @@ export const routes: Routes = [
               './components/contract/edit-contract/edit-contract.component'
             ).then((m) => m.EditContractComponent),
         },
+      },
+      {
+        path: 'contract/view/:id',
+        component: ContractViewComponent,
       },
       {
         path: 'ui-components',

@@ -49,10 +49,8 @@
               matInput
               formControlName="name"
               placeholder="Enter contract name"
+              readonly
             />
-            <mat-error *ngIf="contractForm.get('name')?.errors?.['required']">
-              Contract name is required
-            </mat-error>
           </mat-form-field>
         </div>
 
@@ -63,10 +61,12 @@
               matInput
               [matDatepicker]="picker"
               formControlName="signDate"
+              readonly
             />
             <mat-datepicker-toggle
               matSuffix
               [for]="picker"
+              disabled
             ></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
             <mat-error
