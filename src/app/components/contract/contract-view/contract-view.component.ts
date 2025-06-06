@@ -34,20 +34,15 @@ export class ContractViewComponent {
   ngOnInit() {
     const id = this.route.snapshot.params['id'];
     if (id) {
-      this.contractService.getContractById(id).subscribe(
-        (contract) => {
-          if (contract) {
-            this.contract = contract;
-          } else {
-            console.error('Contract not found');
-            this.router.navigate(['/contract']);
-          }
+      this.contractService.getContractById(id).subscribe({
+        next: (contract) => {
+          this.contract = contract;
         },
-        (error) => {
+        error: (error) => {
           console.error('Error loading contract:', error);
           this.router.navigate(['/contract']);
-        }
-      );
+        },
+      });
     }
   }
 

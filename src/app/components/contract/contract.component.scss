@@ -14,3 +14,45 @@
     color: white;
   }
 }
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.mat-menu-item {
+  .mat-checkbox {
+    margin-right: 8px;
+  }
+}
+
+.button-group {
+  gap: 12px; // Increased spacing between buttons
+
+  .action-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    min-height: 40px; // Increased button height
+    padding: 0 16px; // Add horizontal padding
+
+    mat-icon {
+      margin-right: 8px; // Increased space between icon and text
+      font-size: 20px; // Explicit icon size
+      height: 20px;
+      width: 20px;
+      line-height: 20px;
+    }
+
+    span {
+      line-height: 20px; // Match icon line height
+    }
+  }
+}
+
+// Override Material button styles
+::ng-deep .mat-mdc-button-base {
+  min-height: 40px !important; // Force minimum height
+  height: auto !important; // Allow button to grow if needed
+  line-height: normal !important; // Reset line height
+}

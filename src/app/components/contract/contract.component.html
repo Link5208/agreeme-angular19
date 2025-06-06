@@ -76,12 +76,50 @@
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
       </div>
-      <div class="col-sm-4 d-flex justify-content-end">
-        <button mat-flat-button color="primary" (click)="openAddDialog()">
-          Add Contract
+      <div class="col-sm-4 d-flex justify-content-end button-group">
+        <!-- Column Toggle Button -->
+        <button
+          mat-flat-button
+          [matMenuTriggerFor]="columnMenu"
+          class="action-button"
+        >
+          <mat-icon>view_column</mat-icon>
+          <span>Columns</span>
+        </button>
+        <!-- Export Button -->
+        <button mat-flat-button (click)="exportToExcel()" class="action-button">
+          <mat-icon>download</mat-icon>
+          <span>Export Excel</span>
+        </button>
+        <button
+          mat-flat-button
+          color="primary"
+          (click)="openAddDialog()"
+          class="action-button"
+        >
+          <mat-icon>add</mat-icon>
+          <span>Add Contract</span>
         </button>
       </div>
     </div>
+
+    <!-- Column Toggle Menu -->
+    <mat-menu #columnMenu="matMenu">
+      <button
+        mat-menu-item
+        *ngFor="let column of columnDefinitions"
+        (click)="toggleColumn(column)"
+        [disabled]="column.def === 'actions'"
+      >
+        <mat-checkbox
+          [checked]="column.show"
+          (click)="$event.stopPropagation()"
+          (change)="toggleColumn(column)"
+        >
+          {{ column.label }}
+        </mat-checkbox>
+      </button>
+    </mat-menu>
 
     <!-- Contract Table -->
     <table mat-table [dataSource]="dataSource" matSort class="w-100">

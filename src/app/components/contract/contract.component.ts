@@ -2,7 +2,11 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import {
+  MatPaginator,
+  MatPaginatorModule,
+  PageEvent,
+} from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,6 +17,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Contract } from 'src/app/models/interfaces/Contract';
 import { Router } from '@angular/router';
 import { ContractService } from 'src/app/services/contracts/contract.service';
+import { MatMenuModule } from '@angular/material/menu';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-contract',
@@ -27,6 +33,7 @@ import { ContractService } from 'src/app/services/contracts/contract.service';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
+    MatMenuModule,
   ],
   templateUrl: './contract.component.html',
   styleUrl: './contract.component.scss',
@@ -45,48 +52,78 @@ export class ContractComponent {
   openAddDialog() {
     this.router.navigate(['/contract/add']);
   }
-  displayedColumns: string[] = [
-    'select',
-    'id',
-    'name',
-    'signDate',
-    'status',
-    'actions',
-  ];
 
-  EXAMPLE_DATA: Contract[] = [];
-  dataSource: MatTableDataSource<any>;
-  selection = new SelectionModel<any>(true, []);
+  dataSource: MatTableDataSource<Contract>;
   totalContracts: number = 0;
-  inProgressContracts: number = 0;
-  completedContracts: number = 0;
-  pendingContracts: number = 0;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    private router: Router,
-    private contractService: ContractService
+    private contractService: ContractService,
+    private router: Router
   ) {
     this.dataSource = new MatTableDataSource<Contract>([]);
   }
 
   ngOnInit() {
-    // Update summary cards
-    this.contractService.getAllContracts().subscribe((contracts) => {
-      this.EXAMPLE_DATA = contracts;
-      this.dataSource.data = this.EXAMPLE_DATA;
+    this.loadContracts();
+  }
 
-      // Update summary cards
-      this.totalContracts = this.EXAMPLE_DATA.length;
-      this.inProgressContracts = this.EXAMPLE_DATA.filter(
-        (c) => c.status === 'UNILIQUIDATED'
-      ).length;
-      this.completedContracts = this.EXAMPLE_DATA.filter(
-        (c) => c.status === 'LIQUIDATED'
-      ).length;
+  loadContracts(page: number = 1, size: number = 10) {
+    this.contractService.getAllContracts(page, size).subscribe({
+      next: (response) => {
+        if (response.statusCode === 200) {
+          this.dataSource.data = response.data;
+          this.totalContracts = response.data.length;
+        } else {
+          console.error('Error:', response.message);
+          // Handle error message display
+        }
+      },
+      error: (error) => {
+        console.error('Error loading contracts:', error);
+        // Handle error display (e.g., show snackbar or error message)
+      },
     });
+  }
+
+  // Add error handling helper method
+  private handleError(error: any) {
+    let errorMessage = 'An error occurred';
+    if (error.message) {
+      errorMessage = Array.isArray(error.message)
+        ? error.message.join(', ')
+        : error.message;
+    }
+    // TODO: Show error message to user (e.g., using MatSnackBar)
+    console.error(errorMessage);
+  }
+
+  onPageChange(event: PageEvent) {
+    this.loadContracts(event.pageIndex + 1, event.pageSize);
+  }
+  EXAMPLE_DATA: Contract[] = [];
+
+  selection = new SelectionModel<any>(true, []);
+
+  inProgressContracts: number = 0;
+  completedContracts: number = 0;
+  pendingContracts: number = 0;
+
+  // Add column definitions with display names
+  columnDefinitions = [
+    { def: 'select', label: 'Select', show: true },
+    { def: 'id', label: 'ID', show: true },
+    { def: 'name', label: 'Name', show: true },
+    { def: 'signDate', label: 'Sign Date', show: true },
+    { def: 'status', label: 'Status', show: true },
+    { def: 'actions', label: 'Actions', show: true },
+  ];
+
+  // Update displayedColumns to be dynamic
+  get displayedColumns(): string[] {
+    return this.columnDefinitions.filter((cd) => cd.show).map((cd) => cd.def);
   }
 
   ngAfterViewInit() {
@@ -117,5 +154,29 @@ export class ContractComponent {
       default:
         return status;
     }
+  }
+  toggleColumn(column: any) {
+    column.show = !column.show;
+  }
+
+  // Add method to export to Excel
+  exportToExcel(): void {
+    // Get data excluding 'select' and 'actions' columns
+    const exportData = this.EXAMPLE_DATA.map((item) => ({
+      ID: item.id,
+      Name: item.name,
+      'Sign Date': item.signDate,
+      Status: this.getStatusLabel(item.status),
+    }));
+
+    // Create worksheet
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    // Create workbook
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Contracts');
+
+    // Save file
+    XLSX.writeFile(wb, 'contracts.xlsx');
   }
 }
