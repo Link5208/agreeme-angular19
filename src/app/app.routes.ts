@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
+import { AddContractComponent } from './components/contract/add-contract/add-contract.component';
 
 export const routes: Routes = [
   {
@@ -23,6 +24,10 @@ export const routes: Routes = [
           import('./components/contract/contract.component').then(
             (m) => m.ContractComponent
           ),
+      },
+      {
+        path: 'contract/add',
+        component: AddContractComponent,
       },
       {
         path: 'ui-components',

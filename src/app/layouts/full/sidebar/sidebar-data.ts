@@ -10,6 +10,11 @@ export const navItems: NavItem[] = [
     route: '/dashboard',
   },
   {
+    displayName: 'Contract',
+    iconName: 'list-details',
+    route: '/contract',
+  },
+  {
     displayName: 'Analytical',
     iconName: 'aperture',
     route: 'https://modernize-angular-main.netlify.app/dashboards/dashboard1',
@@ -176,7 +181,7 @@ export const navItems: NavItem[] = [
       },
     ],
   },
-  
+
   {
     displayName: 'Blog',
     iconName: 'chart-donut-3',
@@ -291,7 +296,8 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Progress Spinner',
     iconName: 'rotate-2',
-    route: 'https://modernize-angular-main.netlify.app/ui-components/progress-spinner',
+    route:
+      'https://modernize-angular-main.netlify.app/ui-components/progress-spinner',
     external: true,
     chip: true,
     chipClass: 'bg-light-secondary text-secondary',
@@ -309,7 +315,8 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Slide Toggle',
     iconName: 'toggle-left',
-    route: 'https://modernize-angular-main.netlify.app/ui-components/slide-toggle',
+    route:
+      'https://modernize-angular-main.netlify.app/ui-components/slide-toggle',
     external: true,
     chip: true,
     chipClass: 'bg-light-secondary text-secondary',
@@ -573,7 +580,7 @@ export const navItems: NavItem[] = [
     chipClass: 'bg-light-secondary text-secondary',
     chipContent: 'PRO',
   },
-  
+
   {
     navCap: 'Tables',
   },
@@ -595,7 +602,8 @@ export const navItems: NavItem[] = [
       {
         displayName: 'Dynamic Table',
         iconName: 'point',
-        route: 'https://modernize-angular-main.netlify.app/tables/dynamic-table',
+        route:
+          'https://modernize-angular-main.netlify.app/tables/dynamic-table',
         external: true,
         chip: true,
         chipClass: 'bg-light-secondary text-secondary',
@@ -814,9 +822,10 @@ export const navItems: NavItem[] = [
         iconName: 'point',
         external: true,
         chip: true,
-        chipClass: 'bg-light-secondary text-secondary', 
+        chipClass: 'bg-light-secondary text-secondary',
         chipContent: 'PRO',
-        route: 'https://modernize-angular-main.netlify.app/authentication/login',
+        route:
+          'https://modernize-angular-main.netlify.app/authentication/login',
       },
     ],
   },
@@ -837,7 +846,8 @@ export const navItems: NavItem[] = [
         chip: true,
         chipClass: 'bg-light-secondary text-secondary',
         chipContent: 'PRO',
-        route: 'https://modernize-angular-main.netlify.app/authentication/side-register',
+        route:
+          'https://modernize-angular-main.netlify.app/authentication/side-register',
       },
     ],
   },
@@ -854,7 +864,8 @@ export const navItems: NavItem[] = [
         chip: true,
         chipClass: 'bg-light-secondary text-secondary',
         chipContent: 'PRO',
-        route: 'https://modernize-angular-main.netlify.app/authentication/side-forgot-pwd',
+        route:
+          'https://modernize-angular-main.netlify.app/authentication/side-forgot-pwd',
       },
       {
         displayName: 'Boxed Forgot Pwd',
@@ -863,7 +874,8 @@ export const navItems: NavItem[] = [
         chip: true,
         chipClass: 'bg-light-secondary text-secondary',
         chipContent: 'PRO',
-        route: 'https://modernize-angular-main.netlify.app/authentication/boxed-forgot-pwd',
+        route:
+          'https://modernize-angular-main.netlify.app/authentication/boxed-forgot-pwd',
       },
     ],
   },
@@ -880,7 +892,8 @@ export const navItems: NavItem[] = [
         chip: true,
         chipClass: 'bg-light-secondary text-secondary',
         chipContent: 'PRO',
-        route: 'https://modernize-angular-main.netlify.app/authentication/side-two-steps',
+        route:
+          'https://modernize-angular-main.netlify.app/authentication/side-two-steps',
       },
       {
         displayName: 'Boxed Two Steps',
@@ -889,7 +902,8 @@ export const navItems: NavItem[] = [
         chip: true,
         chipClass: 'bg-light-secondary text-secondary',
         chipContent: 'PRO',
-        route: 'https://modernize-angular-main.netlify.app/authentication/boxed-two-steps',
+        route:
+          'https://modernize-angular-main.netlify.app/authentication/boxed-two-steps',
       },
     ],
   },
@@ -905,7 +919,8 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Maintenance',
     iconName: 'settings',
-    route: 'https://modernize-angular-main.netlify.app//authentication/maintenance',
+    route:
+      'https://modernize-angular-main.netlify.app//authentication/maintenance',
     external: true,
     chip: true,
     chipClass: 'bg-light-secondary text-secondary',

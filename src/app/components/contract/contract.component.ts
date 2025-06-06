@@ -10,6 +10,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { SelectionModel } from '@angular/cdk/collections';
+import { Contract } from 'src/app/models/interfaces/Contract';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-contract',
@@ -40,27 +42,72 @@ export class ContractComponent {
     throw new Error('Method not implemented.');
   }
   openAddDialog() {
-    throw new Error('Method not implemented.');
+    this.router.navigate(['/contract/add']);
   }
   displayedColumns: string[] = [
     'select',
     'id',
-    'contractName',
+    'name',
+    'signDate',
     'status',
     'actions',
   ];
+
+  EXAMPLE_DATA: Contract[] = [
+    {
+      id: '1',
+      name: 'Software Development Contract',
+      signDate: '2024-01-01',
+      status: 'LIQUIDATED',
+    },
+    {
+      id: '2',
+      name: 'IT Consulting Services',
+      signDate: '2023-06-01',
+      status: 'LIQUIDATED',
+    },
+    {
+      id: '3',
+      name: 'Hardware Supply Agreement',
+      signDate: '2024-03-01',
+      status: 'LIQUIDATED',
+    },
+    {
+      id: '4',
+      name: 'Cloud Services Agreement',
+      signDate: '2024-02-01',
+      status: 'UNILIQUIDATED',
+    },
+    {
+      id: '5',
+      name: 'Maintenance Contract',
+      signDate: '2023-01-01',
+      status: 'UNILIQUIDATED',
+    },
+  ];
   dataSource: MatTableDataSource<any>;
   selection = new SelectionModel<any>(true, []);
+  totalContracts: number = 0;
+  inProgressContracts: number = 0;
+  completedContracts: number = 0;
+  pendingContracts: number = 0;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor() {
-    this.dataSource = new MatTableDataSource();
+  constructor(private router: Router) {
+    this.dataSource = new MatTableDataSource(this.EXAMPLE_DATA);
   }
 
   ngOnInit() {
-    // Load your data here
+    // Update summary cards
+    this.totalContracts = this.EXAMPLE_DATA.length;
+    this.inProgressContracts = this.EXAMPLE_DATA.filter(
+      (c) => c.status === 'UNILIQUIDATED'
+    ).length;
+    this.completedContracts = this.EXAMPLE_DATA.filter(
+      (c) => c.status === 'LIQUIDATED'
+    ).length;
   }
 
   ngAfterViewInit() {
@@ -82,17 +129,14 @@ export class ContractComponent {
       : this.dataSource.data.forEach((row) => this.selection.select(row));
   }
 
-  getStatusClass(status: string): string {
-    // Return appropriate CSS class based on status
-    switch (status.toLowerCase()) {
-      case 'completed':
-        return 'status-completed';
-      case 'in progress':
-        return 'status-progress';
-      case 'pending':
-        return 'status-pending';
+  getStatusLabel(status: string): string {
+    switch (status) {
+      case 'LIQUIDATED':
+        return 'Thanh lý';
+      case 'UNILIQUIDATED':
+        return 'Chưa thanh lý';
       default:
-        return '';
+        return status;
     }
   }
 }

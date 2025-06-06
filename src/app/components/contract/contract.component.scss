@@ -1,0 +1,16 @@
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+
+  &.liquidated {
+    background-color: #13deb9;
+    color: white;
+  }
+
+  &.unliquidated {
+    background-color: #ffae1f;
+    color: white;
+  }
+}

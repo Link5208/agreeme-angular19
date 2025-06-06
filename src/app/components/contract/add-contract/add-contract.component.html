@@ -1,0 +1,161 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content>
+    <form [formGroup]="contractForm" (ngSubmit)="onSubmit()">
+      <!-- Header -->
+      <div class="row justify-content-between m-b-24">
+        <div class="col-sm-4 d-flex align-items-center">
+          <h4 class="f-s-18 f-w-600">New Contract</h4>
+        </div>
+        <div class="col-sm-4 text-right">
+          <button
+            mat-flat-button
+            color="warn"
+            class="m-r-10"
+            (click)="onCancel()"
+          >
+            Cancel
+          </button>
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            [disabled]="!contractForm.valid"
+          >
+            Save Contract
+          </button>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- Contract Details -->
+      <div class="row m-y-24">
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Contract ID</mat-label>
+            <input
+              matInput
+              formControlName="id"
+              placeholder="Enter contract ID"
+            />
+            <mat-error *ngIf="contractForm.get('id')?.errors?.['required']">
+              Contract ID is required
+            </mat-error>
+            <mat-error *ngIf="contractForm.get('id')?.errors?.['pattern']">
+              ID must contain only numbers
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Contract Name</mat-label>
+            <input
+              matInput
+              formControlName="name"
+              placeholder="Enter contract name"
+            />
+            <mat-error *ngIf="contractForm.get('name')?.errors?.['required']">
+              Contract name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Sign Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              formControlName="signDate"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error
+              *ngIf="contractForm.get('signDate')?.errors?.['required']"
+            >
+              Sign date is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status">
+              <mat-option value="LIQUIDATED">Thanh lý</mat-option>
+              <mat-option value="UNILIQUIDATED">Chưa thanh lý</mat-option>
+            </mat-select>
+            <mat-error *ngIf="contractForm.get('status')?.errors?.['required']">
+              Status is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Contract Items -->
+      <div class="items-section m-t-24">
+        <h5 class="m-b-16">Contract Items</h5>
+        <div formArrayName="items">
+          <div
+            *ngFor="let item of items.controls; let i = index"
+            [formGroupName]="i"
+            class="row m-b-16"
+          >
+            <div class="col-sm-4">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Item Name</mat-label>
+                <input
+                  matInput
+                  formControlName="itemName"
+                  placeholder="Enter item name"
+                />
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Unit Price</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  formControlName="unitPrice"
+                  placeholder="0"
+                />
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Quantity</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  formControlName="quantity"
+                  placeholder="1"
+                />
+              </mat-form-field>
+            </div>
+            <div class="col-sm-2 d-flex align-items-center">
+              <button
+                mat-icon-button
+                color="warn"
+                type="button"
+                (click)="removeItem(i)"
+                *ngIf="i > 0"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="text-right m-t-16">
+          <button mat-button color="primary" type="button" (click)="addItem()">
+            <mat-icon>add</mat-icon> Add Item
+          </button>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

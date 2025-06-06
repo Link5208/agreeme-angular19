@@ -1,0 +1,87 @@
+.m-y-24 {
+  margin: 24px 0;
+}
+
+.m-b-24 {
+  margin-bottom: 24px;
+}
+
+.m-b-16 {
+  margin-bottom: 16px;
+}
+
+.m-t-24 {
+  margin-top: 24px;
+}
+
+.m-t-16 {
+  margin-top: 16px;
+}
+
+.m-r-10 {
+  margin-right: 10px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.items-section {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 20px;
+  background-color: #fafafa;
+}
+
+mat-form-field {
+  .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+}
+
+.row {
+  margin-bottom: 2rem; // Tăng khoảng cách giữa các row
+}
+
+.items-section {
+  .row {
+    margin-bottom: 1.5rem; // Khoảng cách cho các row trong phần items
+
+    &:last-child {
+      margin-bottom: 0; // Bỏ margin bottom cho row cuối cùng
+    }
+  }
+}
+
+// Các margin helpers
+.m-y-24 {
+  margin-top: 2rem !important;
+  margin-bottom: 2rem !important;
+}
+
+.m-b-24 {
+  margin-bottom: 2rem !important;
+}
+
+.m-b-16 {
+  margin-bottom: 1.5rem !important;
+}
+
+.m-t-24 {
+  margin-top: 2rem !important;
+}
+
+// Custom spacing cho form fields
+mat-form-field {
+  margin-bottom: 1rem;
+
+  &.w-100 {
+    width: 100%;
+  }
+}
+
+// Spacing cho card
+.cardWithShadow {
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
