@@ -7,4 +7,5 @@ export interface Contract {
   signDate?: string;
   status?: 'LIQUIDATED' | 'UNLIQUIDATED';
   items?: Item[];
+  [key: string]: any;
 }
