@@ -32,16 +32,13 @@ Modernize Angular Admin Dashboard
 
 ### Update Contract
 
-- **Endpoint:** `PUT /api/v1/contracts/{id}`
+- **Endpoint:** `PUT /api/v1/contracts`
 - **Description:** Update contract status
-- **Path Parameters:**
-  - `id`: Contract ID
 - **Request Body:** Contract object with updated status
 - **Example Request:**
   ```json
   {
     "id": 1,
-    "contractId": "HD001",
     "status": "LIQUIDATED"
   }
   ```

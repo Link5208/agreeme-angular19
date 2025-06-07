@@ -47,4 +47,10 @@ export class ContractService {
       })
     );
   }
+  updateContractStatus(request: {
+    id: number;
+    status: string;
+  }): Observable<ApiResponse<any>> {
+    return this.http.put<ApiResponse<any>>(`${this.apiUrl}`, request);
+  }
 }
