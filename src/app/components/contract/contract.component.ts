@@ -70,20 +70,29 @@ export class ContractComponent {
     this.loadContracts();
   }
 
+  // Update the loadContracts method
   loadContracts(page: number = 1, size: number = 10) {
     this.contractService.getAllContracts(page, size).subscribe({
       next: (response) => {
-        if (response.statusCode === 200) {
-          this.dataSource.data = response.data;
-          this.totalContracts = response.data.length;
+        if (response.statusCode === 200 && response.data) {
+          // Access the result array from the nested structure
+          this.dataSource.data = response.data.result;
+          this.totalContracts = response.data.meta.total;
+
+          // Update paginator
+          if (this.paginator) {
+            this.paginator.length = response.data.meta.total;
+            this.paginator.pageSize = response.data.meta.pageSize;
+            this.paginator.pageIndex = response.data.meta.page - 1;
+          }
         } else {
           console.error('Error:', response.message);
-          // Handle error message display
+          this.handleError(response.message);
         }
       },
       error: (error) => {
         console.error('Error loading contracts:', error);
-        // Handle error display (e.g., show snackbar or error message)
+        this.handleError(error);
       },
     });
   }
