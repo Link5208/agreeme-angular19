@@ -5,6 +5,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { VndCurrencyPipe } from 'src/app/config/pipe/vnd-currency.pipe';
+
 import { Contract } from 'src/app/models/interfaces/Contract';
 import { ContractService } from 'src/app/services/contracts/contract.service';
 
@@ -16,14 +18,17 @@ import { ContractService } from 'src/app/services/contracts/contract.service';
     MatButtonModule,
     MatDividerModule,
     MatTableModule,
+    VndCurrencyPipe,
   ],
   templateUrl: './contract-view.component.html',
   styleUrl: './contract-view.component.scss',
 })
 export class ContractViewComponent {
   contract: Contract | null = null;
-  taxRate: number = 10;
   displayedColumns: string[] = ['name', 'unit', 'price', 'quantity', 'total'];
+  taxRate: number = 10;
+  loading = false;
+  error: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -32,13 +37,7 @@ export class ContractViewComponent {
   ) {}
 
   ngOnInit() {
-    // Check for token first
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-      this.router.navigate(['/login']);
-      return;
-    }
-
+    this.loading = true;
     const id = this.route.snapshot.params['id'];
     if (id) {
       this.loadContract(id);
@@ -47,34 +46,33 @@ export class ContractViewComponent {
 
   loadContract(id: string) {
     this.contractService.getContractById(id).subscribe({
-      next: (contract) => {
-        if (contract) {
-          this.contract = contract;
+      next: (response) => {
+        if (response.statusCode === 200 && response.data) {
+          this.contract = response.data;
+          // No need to map items since API response matches our interface
         }
       },
       error: (error) => {
-        if (error.status === 401) {
-          this.router.navigate(['/login']);
-        } else {
-          console.error('Error loading contract:', error);
-          this.router.navigate(['/contract']);
-        }
+        console.error('Error loading contract:', error);
+        this.error = error.message || 'Error loading contract';
+      },
+      complete: () => {
+        this.loading = false;
       },
     });
   }
 
   calculateSubTotal(): number {
-    return (
-      this.contract?.items.reduce(
-        (total, item) => total + (item.total || 0),
-        0
-      ) || 0
+    if (!this.contract?.items?.length) return 0;
+    return this.contract.items.reduce(
+      (sum, item) => sum + (item.total || 0),
+      0
     );
   }
 
   calculateTotal(): number {
-    const subTotal = this.calculateSubTotal();
-    return subTotal + (subTotal * this.taxRate) / 100;
+    const subtotal = this.calculateSubTotal();
+    return subtotal * (1 + this.taxRate / 100);
   }
 
   onBack() {
@@ -82,6 +80,8 @@ export class ContractViewComponent {
   }
 
   onEdit() {
-    this.router.navigate(['/contract/edit', this.contract?.id]);
+    if (this.contract?.id) {
+      this.router.navigate(['/contract/edit', this.contract.id]);
+    }
   }
 }

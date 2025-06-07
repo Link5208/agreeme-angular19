@@ -29,8 +29,8 @@ export class ContractService {
     );
   }
 
-  getContractById(id: string): Observable<Contract> {
-    return this.http.get<Contract>(`${this.apiUrl}/${id}`).pipe(
+  getContractById(id: string): Observable<ApiResponse<Contract>> {
+    return this.http.get<ApiResponse<Contract>>(`${this.apiUrl}/${id}`).pipe(
       catchError((error) => {
         console.error('Error fetching contract:', error);
         throw error;

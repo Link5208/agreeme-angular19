@@ -41,10 +41,9 @@
       </div>
     </div>
 
-    <!-- Contract Items Table -->
     <div class="table-responsive">
-      <table mat-table [dataSource]="contract?.items ?? []" class="w-100">
-        <!-- Item Name Column -->
+      <table mat-table [dataSource]="contract?.items || []" class="w-100">
+        <!-- Name Column -->
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef class="f-s-15 f-w-600">
             Item Name
@@ -63,7 +62,9 @@
           <th mat-header-cell *matHeaderCellDef class="f-s-15 f-w-600">
             Unit Price
           </th>
-          <td mat-cell *matCellDef="let item">{{ item.price | currency }}</td>
+          <td mat-cell *matCellDef="let item">
+            {{ item.price | vndCurrency }} VND
+          </td>
         </ng-container>
 
         <!-- Quantity Column -->
@@ -79,9 +80,12 @@
           <th mat-header-cell *matHeaderCellDef class="f-s-15 f-w-600">
             Total
           </th>
-          <td mat-cell *matCellDef="let item">{{ item.total | currency }}</td>
+          <td mat-cell *matCellDef="let item">
+            {{ item.total | vndCurrency }} VND
+          </td>
         </ng-container>
 
+        <!-- Header and Row Definitions -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
@@ -90,12 +94,8 @@
     <!-- Totals -->
     <div class="text-right m-t-30">
       <h5 class="m-b-5 f-w-600 f-s-16">
-        Sub total: {{ calculateSubTotal() | currency }}
+        Total: {{ calculateSubTotal() | vndCurrency }}
       </h5>
-      <span class="f-w-600 f-s-16">Tax: {{ taxRate }}%</span>
-      <h3 class="m-b-0 b-t-1 p-t-20 f-s-18 m-t-24">
-        Grand Total: {{ calculateTotal() | currency }}
-      </h3>
     </div>
   </mat-card-content>
 </mat-card>

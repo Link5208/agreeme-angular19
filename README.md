@@ -22,7 +22,7 @@ Modernize Angular Admin Dashboard
         "name": "A4 Paper",
         "unit": "Ream",
         "quantity": 100,
-        "unitPrice": 50.0,
+        "price": 50.0,
         "total": 5000.0
       }
     ]
@@ -104,7 +104,7 @@ The system supports the following contract statuses:
     "name": "A4 Paper",
     "unit": "Ream",
     "quantity": 100,
-    "unitPrice": 50.0,
+    "price": 50.0,
     "total": 5000.0,
     "contract": {
       "contractId": "HD001"
@@ -127,7 +127,7 @@ The system supports the following contract statuses:
     "id": 1,
     "itemId": "VT001",
     "quantity": 150,
-    "unitPrice": 45.0,
+    "price": 45.0,
     "total": 6750.0
   }
   ```
