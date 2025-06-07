@@ -22,8 +22,7 @@ Modernize Angular Admin Dashboard
         "name": "A4 Paper",
         "unit": "Ream",
         "quantity": 100,
-        "price": 50.0,
-        "total": 5000.0
+        "price": 50.0
       }
     ]
   }

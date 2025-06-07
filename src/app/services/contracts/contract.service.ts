@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { ApiResponse } from 'src/app/models/interfaces/ApiResponse';
 import { Contract } from 'src/app/models/interfaces/Contract';
 import { PaginatedResponse } from 'src/app/models/interfaces/PaginationResponse';
@@ -34,6 +34,16 @@ export class ContractService {
       catchError((error) => {
         console.error('Error fetching contract:', error);
         throw error;
+      })
+    );
+  }
+
+  createContract(request: Contract): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}`, request).pipe(
+      tap((response) => console.log('Create contract response:', response)),
+      catchError((error) => {
+        console.error('Create contract error:', error);
+        return throwError(() => error);
       })
     );
   }

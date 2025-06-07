@@ -154,11 +154,12 @@ export class ContractComponent {
       : this.dataSource.data.forEach((row) => this.selection.select(row));
   }
 
-  getStatusLabel(status: string): string {
+  getStatusLabel(status: string | undefined): string {
+    if (!status) return 'Unknown'; // Handle undefined case
     switch (status) {
       case 'LIQUIDATED':
         return 'Thanh lý';
-      case 'UNILIQUIDATED':
+      case 'UNLIQUIDATED':
         return 'Chưa thanh lý';
       default:
         return status;
@@ -172,7 +173,7 @@ export class ContractComponent {
   exportToExcel(): void {
     // Get data excluding 'select' and 'actions' columns
     const exportData = this.EXAMPLE_DATA.map((item) => ({
-      ID: item.id,
+      ID: item.contractId,
       Name: item.name,
       'Sign Date': item.signDate,
       Status: this.getStatusLabel(item.status),

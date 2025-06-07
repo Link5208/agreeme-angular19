@@ -82,7 +82,7 @@
             <mat-label>Status</mat-label>
             <mat-select formControlName="status">
               <mat-option value="LIQUIDATED">Thanh lý</mat-option>
-              <mat-option value="UNILIQUIDATED">Chưa thanh lý</mat-option>
+              <mat-option value="UNLIQUIDATED">Chưa thanh lý</mat-option>
             </mat-select>
             <mat-error *ngIf="contractForm.get('status')?.errors?.['required']">
               Status is required

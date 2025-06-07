@@ -84,4 +84,14 @@ export class ContractViewComponent {
       this.router.navigate(['/contract/edit', this.contract.id]);
     }
   }
+  getStatusLabel(status: string | undefined): string {
+    switch (status) {
+      case 'LIQUIDATED':
+        return 'Đã thanh lý';
+      case 'UNLIQUIDATED':
+        return 'Chưa thanh lý';
+      default:
+        return status || '';
+    }
+  }
 }

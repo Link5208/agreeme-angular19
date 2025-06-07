@@ -9,6 +9,7 @@ import {
   LoginResponse,
   User,
 } from 'src/app/models/interfaces/Auth';
+import { Contract } from 'src/app/models/interfaces/Contract';
 import { environment } from 'src/environments/environment';
 
 @Injectable({

@@ -77,13 +77,13 @@ export class EditContractComponent {
 
     // For now using mock data
     const mockData: Contract = {
-      id: id,
+      contractId: id,
       name: 'Software Development Contract',
       signDate: '2024-01-01',
-      status: 'UNILIQUIDATED',
+      status: 'UNLIQUIDATED',
       items: [
         {
-          id: '1',
+          itemId: '1',
           name: 'Development',
           unit: 'hour',
           price: 1000,
@@ -91,7 +91,7 @@ export class EditContractComponent {
           total: 1000,
         },
         {
-          id: '2',
+          itemId: '2',
           name: 'Testing',
           unit: 'hour',
           price: 500,

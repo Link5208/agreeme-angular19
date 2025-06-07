@@ -1,9 +1,10 @@
 import { Item } from './Item';
 
 export interface Contract {
-  id: string;
+  id?: number;
+  contractId: string;
   name: string;
   signDate: string;
-  status: 'LIQUIDATED' | 'UNILIQUIDATED';
+  status?: 'LIQUIDATED' | 'UNLIQUIDATED';
   items: Item[];
 }
