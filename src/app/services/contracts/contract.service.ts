@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { ApiResponse } from 'src/app/models/interfaces/ApiResponse';
 import { Contract } from 'src/app/models/interfaces/Contract';
 import { environment } from 'src/environments/environment.development';
@@ -26,8 +26,11 @@ export class ContractService {
   }
 
   getContractById(id: string): Observable<Contract> {
-    return this.http
-      .get<ApiResponse<Contract>>(`${this.apiUrl}/${id}`)
-      .pipe(map((response) => response.data));
+    return this.http.get<Contract>(`${this.apiUrl}/${id}`).pipe(
+      catchError((error) => {
+        console.error('Error fetching contract:', error);
+        throw error;
+      })
+    );
   }
 }

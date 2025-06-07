@@ -5,21 +5,14 @@ import { AddContractComponent } from './components/contract/add-contract/add-con
 import { EditContractComponent } from './components/contract/edit-contract/edit-contract.component';
 import { ContractViewComponent } from './components/contract/contract-view/contract-view.component';
 import { LoginComponent } from './components/auth/login/login.component';
+import { authGuard } from './config/guard/auth.guard';
 
 export const routes: Routes = [
   {
-    path: 'login',
-    component: LoginComponent,
-  },
-  {
     path: '',
     component: FullComponent,
+    canActivate: [authGuard],
     children: [
-      {
-        path: '',
-        redirectTo: '/dashboard',
-        pathMatch: 'full',
-      },
       {
         path: 'dashboard',
         loadChildren: () =>
@@ -70,13 +63,15 @@ export const routes: Routes = [
     component: BlankComponent,
     children: [
       {
-        path: 'authentication',
-        loadChildren: () =>
-          import('./pages/authentication/authentication.routes').then(
-            (m) => m.AuthenticationRoutes
-          ),
+        path: 'login',
+        component: LoginComponent,
       },
     ],
+  },
+  {
+    path: '',
+    redirectTo: 'dashboard',
+    pathMatch: 'full',
   },
   {
     path: '**',

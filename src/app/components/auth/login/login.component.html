@@ -22,7 +22,7 @@
       </div>
 
       <!-- Social Login Buttons -->
-      <div class="row m-t-24">
+      <!-- <div class="row m-t-24">
         <div class="col-12 col-sm-6">
           <button mat-stroked-button class="w-100" (click)="loginWithGoogle()">
             <div class="d-flex align-items-center">
@@ -55,7 +55,7 @@
         </div>
       </div>
 
-      <div class="or-border m-t-30">or sign in with</div>
+      <div class="or-border m-t-30">or sign in with</div> -->
 
       <!-- Login Form -->
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="m-t-30">
@@ -102,10 +102,17 @@
           mat-flat-button
           color="primary"
           class="w-100"
-          [disabled]="!loginForm.valid"
+          [disabled]="!loginForm.valid || loading"
+          type="submit"
         >
-          Sign In
+          <span *ngIf="!loading">Sign In</span>
+          <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
         </button>
+
+        <!-- Error Message -->
+        <div class="error-message mt-3 text-center" *ngIf="error">
+          {{ error }}
+        </div>
       </form>
 
       <!-- Register Link -->

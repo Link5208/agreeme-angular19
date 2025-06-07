@@ -17,3 +17,16 @@
     }
   }
 }
+
+.error-message {
+  color: #f44336;
+  font-size: 0.875rem;
+  margin-top: 8px;
+}
+
+button {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

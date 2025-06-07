@@ -32,33 +32,35 @@ export class ContractViewComponent {
   ) {}
 
   ngOnInit() {
+    // Check for token first
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
     const id = this.route.snapshot.params['id'];
     if (id) {
-      this.contractService.getContractById(id).subscribe({
-        next: (contract) => {
-          this.contract = contract;
-        },
-        error: (error) => {
-          console.error('Error loading contract:', error);
-          this.router.navigate(['/contract']);
-        },
-      });
+      this.loadContract(id);
     }
   }
 
   loadContract(id: string) {
-    this.contractService.getContractById(id).subscribe(
-      (contract) => {
+    this.contractService.getContractById(id).subscribe({
+      next: (contract) => {
         if (contract) {
           this.contract = contract;
         }
       },
-      (error) => {
-        console.error('Error loading contract:', error);
-        // Handle error - maybe navigate back or show error message
-        this.router.navigate(['/contract']);
-      }
-    );
+      error: (error) => {
+        if (error.status === 401) {
+          this.router.navigate(['/login']);
+        } else {
+          console.error('Error loading contract:', error);
+          this.router.navigate(['/contract']);
+        }
+      },
+    });
   }
 
   calculateSubTotal(): number {
