@@ -4,8 +4,13 @@ import { FullComponent } from './layouts/full/full.component';
 import { AddContractComponent } from './components/contract/add-contract/add-contract.component';
 import { EditContractComponent } from './components/contract/edit-contract/edit-contract.component';
 import { ContractViewComponent } from './components/contract/contract-view/contract-view.component';
+import { LoginComponent } from './components/auth/login/login.component';
 
 export const routes: Routes = [
+  {
+    path: 'login',
+    component: LoginComponent,
+  },
   {
     path: '',
     component: FullComponent,

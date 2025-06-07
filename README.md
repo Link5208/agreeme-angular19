@@ -174,3 +174,80 @@ The system supports the following contract statuses:
   - `itemId`: Item ID
 - **Response:** Item object
 - **Status Code:** 200 (OK)
+
+## Authentication APIs
+
+### Register User
+
+- **Endpoint:** `POST /api/v1/auth/register`
+- **Description:** Register a new user
+- **Request Body:** User object
+- **Example Request:**
+  ```json
+  {
+    "email": "admin@gmail.com",
+    "password": "123456"
+  }
+  ```
+- **Response:** Created user object
+- **Status Code:** 201 (Created)
+
+### Login
+
+- **Endpoint:** `POST /api/v1/auth/login`
+- **Description:** Authenticate user and get tokens
+- **Request Body:** Login credentials
+- **Example Request:**
+  ```json
+  {
+    "username": "admin@gmail.com",
+    "password": "123456"
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "user": {
+      "id": 1,
+      "email": "admin@gmail.com"
+    },
+    "accessToken": "eyJhbGciOiJIUzI1..."
+  }
+  ```
+- **Cookie Set:** HTTP-only secure cookie with refresh token
+- **Status Code:** 200 (OK)
+
+### Get Account
+
+- **Endpoint:** `GET /api/v1/auth/account`
+- **Description:** Get current user account details
+- **Headers Required:** Bearer token
+- **Response:** User account details
+- **Status Code:** 200 (OK)
+
+### Refresh Token
+
+- **Endpoint:** `GET /api/v1/auth/refresh`
+- **Description:** Get new access token using refresh token
+- **Cookie Required:** refresh_token
+- **Response:**
+  ```json
+  {
+    "user": {
+      "id": 1,
+      "email": "admin@gmail.com"
+    },
+    "accessToken": "eyJhbGciOiJIUzI1..."
+  }
+  ```
+- **Cookie Set:** New HTTP-only secure cookie with refresh token
+- **Status Code:** 200 (OK)
+
+### Logout
+
+- **Endpoint:** `POST /api/v1/auth/logout`
+- **Description:** Logout user and invalidate tokens
+- **Headers Required:** Bearer token
+- **Response:** No content
+- **Cookie Set:** Clears refresh_token cookie
+- **Status Code:** 200 (OK)
