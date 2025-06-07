@@ -77,6 +77,22 @@ Modernize Angular Admin Dashboard
 - **Response:** Contract object
 - **Status Code:** 200 (OK)
 
+### Delete Contract
+
+- **Endpoint:** `DELETE /api/v1/contracts/{id}`
+- **Description:** Delete a contract by ID
+- **Path Parameters:**
+  - `id`: Contract ID (long)
+- **Response:** No content
+- **Status Code:** 200 (OK)
+- **Error Responses:**
+  - `404 Not Found`: If contract with given ID doesn't exist
+  - `400 Bad Request`: If ID is invalid
+- **Example Request:**
+  ```bash
+  DELETE /api/v1/contracts/1
+  ```
+
 ### Contract Status
 
 The system supports the following contract statuses:

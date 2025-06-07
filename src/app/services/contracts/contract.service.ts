@@ -53,4 +53,8 @@ export class ContractService {
   }): Observable<ApiResponse<any>> {
     return this.http.put<ApiResponse<any>>(`${this.apiUrl}`, request);
   }
+
+  deleteContract(id: number): Observable<ApiResponse<void>> {
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`);
+  }
 }

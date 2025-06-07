@@ -40,8 +40,39 @@ import * as XLSX from 'xlsx';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ContractComponent {
-  deleteContract(_t126: any) {
-    throw new Error('Method not implemented.');
+  deleteContract(contract: Contract) {
+    if (!contract.id) {
+      console.error('Contract ID is undefined');
+      return;
+    }
+    if (
+      confirm(
+        `Are you sure you want to delete contract ${contract.contractId}?`
+      )
+    ) {
+      this.contractService.deleteContract(contract.id).subscribe({
+        next: (response) => {
+          if (response.statusCode === 200) {
+            const index = this.dataSource.data.findIndex(
+              (item) => item.id === contract.id
+            );
+            if (index > -1) {
+              this.dataSource.data.splice(index, 1);
+              this.dataSource._updateChangeSubscription();
+            }
+          }
+        },
+        error: (error) => {
+          console.error('Error deleting contract:', error);
+          // Handle different error cases
+          if (error.status === 404) {
+            console.error('Contract not found');
+          } else if (error.status === 400) {
+            console.error('Bad request');
+          }
+        },
+      });
+    }
   }
   viewContract(contract: Contract) {
     this.router.navigate(['/contract/view', contract.id]);
