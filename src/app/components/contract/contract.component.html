@@ -72,7 +72,12 @@
     <div class="row justify-content-between align-items-center mb-3">
       <div class="col-sm-4">
         <mat-form-field appearance="outline" class="w-100">
-          <input matInput placeholder="Search Contract" #searchInput />
+          <input
+            matInput
+            placeholder="Search by ID or Name"
+            [formControl]="searchControl"
+            (keyup)="onSearch()"
+          />
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
       </div>
@@ -198,8 +203,13 @@
     </table>
 
     <mat-paginator
+      [length]="totalContracts"
+      [pageSize]="5"
       [pageSizeOptions]="[5, 10, 25]"
-      showFirstLastButtons
-    ></mat-paginator>
+      [showFirstLastButtons]="true"
+      (page)="onPageChange($event)"
+      aria-label="Select page"
+    >
+    </mat-paginator>
   </mat-card-content>
 </mat-card>

@@ -1,4 +1,9 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -19,6 +24,13 @@ import { Router } from '@angular/router';
 import { ContractService } from 'src/app/services/contracts/contract.service';
 import { MatMenuModule } from '@angular/material/menu';
 import * as XLSX from 'xlsx';
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-contract',
@@ -34,12 +46,33 @@ import * as XLSX from 'xlsx';
     MatFormFieldModule,
     MatInputModule,
     MatMenuModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './contract.component.html',
   styleUrl: './contract.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class ContractComponent {
+export class ContractComponent implements OnInit {
+  dataSource = new MatTableDataSource<Contract>([]);
+  totalItems = 0;
+  currentPage = 1;
+  pageSize = 5;
+  pageSizeOptions: number[] = [5, 10, 25];
+  searchControl = new FormControl('');
+
+  onSearch(): void {
+    const searchTerm = this.searchControl.value;
+    let filter = '';
+
+    if (searchTerm && searchTerm.trim()) {
+      // Build Spring Filter syntax for name or contractId search
+      filter = `name ~~ '*${searchTerm}*' or contractId ~~ '*${searchTerm}*'`;
+    }
+
+    this.currentPage = 1; // Reset to first page when searching
+    this.loadContracts(filter);
+  }
+
   deleteContract(contract: Contract) {
     if (!contract.id) {
       console.error('Contract ID is undefined');
@@ -84,7 +117,6 @@ export class ContractComponent {
     this.router.navigate(['/contract/add']);
   }
 
-  dataSource: MatTableDataSource<Contract>;
   totalContracts: number = 0;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -92,40 +124,65 @@ export class ContractComponent {
 
   constructor(
     private contractService: ContractService,
-    private router: Router
+    private router: Router,
+    private fb: FormBuilder
   ) {
     this.dataSource = new MatTableDataSource<Contract>([]);
   }
 
   ngOnInit() {
+    this.searchControl.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe(() => {
+        this.onSearch();
+      });
+
     this.loadContracts();
   }
 
-  // Update the loadContracts method
-  loadContracts(page: number = 1, size: number = 10) {
-    this.contractService.getAllContracts(page, size).subscribe({
-      next: (response) => {
-        if (response.statusCode === 200 && response.data) {
-          // Access the result array from the nested structure
-          this.dataSource.data = response.data.result;
-          this.totalContracts = response.data.meta.total;
+  onPageChange(event: PageEvent): void {
+    this.currentPage = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
 
-          // Update paginator
-          if (this.paginator) {
-            this.paginator.length = response.data.meta.total;
-            this.paginator.pageSize = response.data.meta.pageSize;
-            this.paginator.pageIndex = response.data.meta.page - 1;
+    // Get current search term and create filter
+    const searchTerm = this.searchControl.value;
+    let filter = '';
+
+    if (searchTerm && searchTerm.trim()) {
+      filter = `name ~~ '*${searchTerm}*' or contractId ~~ '*${searchTerm}*'`;
+    }
+
+    // Load contracts with current search filter
+    this.loadContracts(filter);
+  }
+
+  // Update the loadContracts method
+  loadContracts(filter?: string) {
+    this.contractService
+      .getAllContracts(this.currentPage, this.pageSize, filter)
+      .subscribe({
+        next: (response) => {
+          if (response.statusCode === 200 && response.data) {
+            // Access the result array from the nested structure
+            this.dataSource.data = response.data.result;
+            this.totalContracts = response.data.meta.total;
+
+            // Update paginator
+            if (this.paginator) {
+              this.paginator.length = response.data.meta.total;
+              this.paginator.pageSize = response.data.meta.pageSize;
+              this.paginator.pageIndex = response.data.meta.page - 1;
+            }
+          } else {
+            console.error('Error:', response.message);
+            this.handleError(response.message);
           }
-        } else {
-          console.error('Error:', response.message);
-          this.handleError(response.message);
-        }
-      },
-      error: (error) => {
-        console.error('Error loading contracts:', error);
-        this.handleError(error);
-      },
-    });
+        },
+        error: (error) => {
+          console.error('Error loading contracts:', error);
+          this.handleError(error);
+        },
+      });
   }
 
   // Add error handling helper method
@@ -139,11 +196,6 @@ export class ContractComponent {
     // TODO: Show error message to user (e.g., using MatSnackBar)
     console.error(errorMessage);
   }
-
-  onPageChange(event: PageEvent) {
-    this.loadContracts(event.pageIndex + 1, event.pageSize);
-  }
-  EXAMPLE_DATA: Contract[] = [];
 
   selection = new SelectionModel<any>(true, []);
 

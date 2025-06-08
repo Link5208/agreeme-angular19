@@ -16,16 +16,25 @@ export class ContractService {
 
   getAllContracts(
     page: number = 1,
-    size: number = 10
+    size: number = 10,
+    filter?: string,
+    sort?: string,
+    direction?: 'asc' | 'desc'
   ): Observable<ApiResponse<PaginatedResponse<Contract>>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    if (filter) {
+      params = params.set('filter', filter);
+    }
+    if (sort && direction) {
+      params = params.set('sort', `${sort},${direction}`);
+    }
+
     return this.http.get<ApiResponse<PaginatedResponse<Contract>>>(
       `${this.apiUrl}`,
-      {
-        params: {
-          page: page.toString(),
-          size: size.toString(),
-        },
-      }
+      { params }
     );
   }
 
