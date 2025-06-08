@@ -22,3 +22,8 @@ export interface LoginResponse {
   user: User;
   access_token: string;
 }
+
+export interface RegisterRequest {
+  email: string;
+  password: string;
+}

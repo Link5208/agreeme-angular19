@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
+import { Account } from 'src/app/models/interfaces/Account';
 import { ApiResponse } from 'src/app/models/interfaces/ApiResponse';
 import {
   AuthResponse,
@@ -33,10 +34,6 @@ export class AuthService {
         console.error('Invalid user data in localStorage:', error);
       }
     }
-  }
-
-  register(request: RegisterRequest): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/register`, request);
   }
 
   login(credentials: LoginRequest): Observable<ApiResponse<LoginResponse>> {
@@ -99,8 +96,8 @@ export class AuthService {
     );
   }
 
-  getAccount(): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/account`);
+  getAccount(): Observable<ApiResponse<Account>> {
+    return this.http.get<ApiResponse<Account>>(`${this.apiUrl}/account`);
   }
 
   getAccessToken(): string | null {
@@ -109,5 +106,16 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return !!this.getAccessToken();
+  }
+
+  register(request: RegisterRequest): Observable<ApiResponse<any>> {
+    return this.http
+      .post<ApiResponse<any>>(`${this.apiUrl}/register`, request)
+      .pipe(
+        catchError((error) => {
+          console.error('Registration error:', error);
+          throw error.error?.message || 'Registration failed';
+        })
+      );
   }
 }

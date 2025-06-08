@@ -6,6 +6,7 @@ import { EditContractComponent } from './components/contract/edit-contract/edit-
 import { ContractViewComponent } from './components/contract/contract-view/contract-view.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { authGuard } from './config/guard/auth.guard';
+import { RegisterComponent } from './components/auth/register/register.component';
 
 export const routes: Routes = [
   {
@@ -65,6 +66,10 @@ export const routes: Routes = [
       {
         path: 'login',
         component: LoginComponent,
+      },
+      {
+        path: 'register',
+        component: RegisterComponent,
       },
     ],
   },

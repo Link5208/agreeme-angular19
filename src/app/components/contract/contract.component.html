@@ -1,7 +1,7 @@
 <div class="row">
   <!-- Summary Cards -->
-  <!-- <div class="col-sm-6 col-lg-3">
-    <mat-card class="cardWithShadow cursor-pointer bg-light-primary">
+  <!-- <div class="col-sm-6 col-lg-4">
+    <mat-card class="cardWithShadow bg-light-primary">
       <mat-card-content class="d-flex align-items-center gap-16">
         <div
           class="icon icon-38 rounded d-flex align-items-center justify-content-center bg-primary text-white"
@@ -10,29 +10,13 @@
         </div>
         <div class="info">
           <h5 class="f-w-400 f-s-14">Total</h5>
-          <h5 class="f-w-500 f-s-14">7 contracts</h5>
+          <h5 class="f-w-500 f-s-14">{{ totalContracts }} contracts</h5>
         </div>
       </mat-card-content>
     </mat-card>
   </div>
 
-  <div class="col-sm-6 col-lg-3">
-    <mat-card class="cardWithShadow cursor-pointer bg-light-secondary">
-      <mat-card-content class="d-flex align-items-center gap-16">
-        <div
-          class="icon icon-38 rounded d-flex align-items-center justify-content-center bg-secondary text-white"
-        >
-          <i-tabler name="shopping-bag" class="icon-24"></i-tabler>
-        </div>
-        <div class="info">
-          <h5 class="f-w-400 f-s-14">In Progress</h5>
-          <h5 class="f-w-500 f-s-14">3 contracts</h5>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-
-  <div class="col-sm-6 col-lg-3">
+  <div class="col-sm-6 col-lg-4">
     <mat-card class="cardWithShadow cursor-pointer bg-light-success">
       <mat-card-content class="d-flex align-items-center gap-16">
         <div
@@ -41,14 +25,14 @@
           <i-tabler name="check" class="icon-24"></i-tabler>
         </div>
         <div class="info">
-          <h5 class="f-w-400 f-s-14">Completed</h5>
-          <h5 class="f-w-500 f-s-14">3 contracts</h5>
+          <h5 class="f-w-400 f-s-14">Thanh Lý</h5>
+          <h5 class="f-w-500 f-s-14">{{ liquidatedContracts }} contracts</h5>
         </div>
       </mat-card-content>
     </mat-card>
   </div>
 
-  <div class="col-sm-6 col-lg-3">
+  <div class="col-sm-6 col-lg-4">
     <mat-card class="cardWithShadow cursor-pointer bg-light-warning">
       <mat-card-content class="d-flex align-items-center gap-16">
         <div
@@ -57,8 +41,8 @@
           <i-tabler name="alert-triangle" class="icon-24"></i-tabler>
         </div>
         <div class="info">
-          <h5 class="f-w-400 f-s-14">Pending</h5>
-          <h5 class="f-w-500 f-s-14">1 contract</h5>
+          <h5 class="f-w-400 f-s-14">Chưa Thanh Lý</h5>
+          <h5 class="f-w-500 f-s-14">{{ unliquidatedContracts }} contract</h5>
         </div>
       </mat-card-content>
     </mat-card>

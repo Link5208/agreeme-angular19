@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
   error: string | null = null;
-  returnUrl: string = '/dashboard';
+  returnUrl: string = '/contract';
 
   constructor(
     private fb: FormBuilder,
@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
   }
   ngOnInit(): void {
     this.returnUrl =
-      this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+      this.route.snapshot.queryParams['returnUrl'] || '/contract';
   }
 
   onSubmit() {

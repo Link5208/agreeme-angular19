@@ -211,7 +211,7 @@ export class ContractComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
 
   inProgressContracts: number = 0;
-  completedContracts: number = 0;
+  liqidatedContracts: number = 0;
   pendingContracts: number = 0;
 
   // Add column definitions with display names

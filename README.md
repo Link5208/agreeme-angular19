@@ -307,3 +307,35 @@ The system supports the following contract statuses:
 - **Response:** No content
 - **Cookie Set:** Clears refresh_token cookie
 - **Status Code:** 200 (OK)
+
+# User Registration API
+
+### Endpoint
+
+- **URL:** `/api/v1/auth/register`
+- **Method:** `POST`
+- **Description:** Register a new user account
+
+### Request
+
+- **Content-Type:** `application/json`
+- **Body:**
+
+```json
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
+```
+
+### Validation
+
+- Email must be valid format
+- Email must be unique (not already registered)
+- Password must not be blank
+
+### Notes
+
+- Password will be encrypted before storing
+- User status will be set to active by default
+- Authorization not required for this endpoint
