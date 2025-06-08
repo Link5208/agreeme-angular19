@@ -42,7 +42,15 @@
         <h6 class="m-t-5 m-b-0 f-w-500 f-s-14">{{ contract?.name }}</h6>
       </div>
     </div>
-
+    <!-- Export Button -->
+    <div class="row mb-3">
+      <div class="col-sm-12 d-flex justify-content-end">
+        <button mat-flat-button color="primary" (click)="exportItemsToExcel()">
+          <mat-icon class="mr-2">download</mat-icon>
+          Export Items to Excel
+        </button>
+      </div>
+    </div>
     <div class="table-responsive">
       <table mat-table [dataSource]="contract?.items || []" class="w-100">
         <!-- Name Column -->

@@ -9,7 +9,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VndCurrencyPipe } from 'src/app/config/pipe/vnd-currency.pipe';
 import { ActionLog } from 'src/app/models/interfaces/ActionLog';
-
+import * as XLSX from 'xlsx';
 import { Contract } from 'src/app/models/interfaces/Contract';
 import { FileInfo } from 'src/app/models/interfaces/FileInfo';
 import { ContractService } from 'src/app/services/contracts/contract.service';
@@ -77,6 +77,34 @@ export class ContractViewComponent {
         this.loading = false;
       },
     });
+  }
+
+  exportItemsToExcel(): void {
+    if (!this.contract?.items?.length) {
+      return;
+    }
+
+    // Prepare data for export
+    const data = this.contract.items.map((item) => ({
+      'Item Name': item.name,
+      Unit: item.unit,
+      'Unit Price': item.price,
+      Quantity: item.quantity,
+      Total: item.total,
+    }));
+
+    // Create worksheet
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+
+    // Create workbook
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Items');
+
+    // Generate & download Excel file
+    const fileName = `contract_${this.contract.contractId}_items_${
+      new Date().toISOString().split('T')[0]
+    }.xlsx`;
+    XLSX.writeFile(wb, fileName);
   }
 
   // Add helper method to format file size
