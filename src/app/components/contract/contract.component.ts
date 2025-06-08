@@ -60,6 +60,13 @@ export class ContractComponent implements OnInit {
   pageSizeOptions: number[] = [5, 10, 25];
   searchControl = new FormControl('');
 
+  @ViewChild(MatSort) sort!: MatSort;
+
+  // Track current sort state
+  currentSort = {
+    active: '',
+    direction: '',
+  };
   onSearch(): void {
     const searchTerm = this.searchControl.value;
     let filter = '';
@@ -120,7 +127,6 @@ export class ContractComponent implements OnInit {
   totalContracts: number = 0;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private contractService: ContractService,
@@ -139,7 +145,13 @@ export class ContractComponent implements OnInit {
 
     this.loadContracts();
   }
-
+  ngAfterViewInit() {
+    // Listen for sort changes
+    this.sort.sortChange.subscribe(() => {
+      this.paginator.pageIndex = 0; // Reset to first page when sorting
+      this.loadContracts();
+    });
+  }
   onPageChange(event: PageEvent): void {
     this.currentPage = event.pageIndex + 1;
     this.pageSize = event.pageSize;
@@ -159,20 +171,19 @@ export class ContractComponent implements OnInit {
   // Update the loadContracts method
   loadContracts(filter?: string) {
     this.contractService
-      .getAllContracts(this.currentPage, this.pageSize, filter)
+      .getAllContracts(
+        this.currentPage,
+        this.pageSize,
+        filter,
+        this.sort?.active,
+        this.sort?.direction as 'asc' | 'desc'
+      )
       .subscribe({
         next: (response) => {
           if (response.statusCode === 200 && response.data) {
             // Access the result array from the nested structure
             this.dataSource.data = response.data.result;
             this.totalContracts = response.data.meta.total;
-
-            // Update paginator
-            if (this.paginator) {
-              this.paginator.length = response.data.meta.total;
-              this.paginator.pageSize = response.data.meta.pageSize;
-              this.paginator.pageIndex = response.data.meta.page - 1;
-            }
           } else {
             console.error('Error:', response.message);
             this.handleError(response.message);
@@ -216,11 +227,6 @@ export class ContractComponent implements OnInit {
   // Update displayedColumns to be dynamic
   get displayedColumns(): string[] {
     return this.columnDefinitions.filter((cd) => cd.show).map((cd) => cd.def);
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   /** Whether the number of selected elements matches the total number of rows. */

@@ -1,6 +1,6 @@
 <div class="row">
   <!-- Summary Cards -->
-  <div class="col-sm-6 col-lg-3">
+  <!-- <div class="col-sm-6 col-lg-3">
     <mat-card class="cardWithShadow cursor-pointer bg-light-primary">
       <mat-card-content class="d-flex align-items-center gap-16">
         <div
@@ -62,7 +62,7 @@
         </div>
       </mat-card-content>
     </mat-card>
-  </div>
+  </div> -->
 </div>
 
 <!-- Contract List -->
@@ -150,25 +150,31 @@
 
       <!-- ID Column -->
       <ng-container matColumnDef="contractId">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="contractId">
+          ID
+        </th>
         <td mat-cell *matCellDef="let element">{{ element.contractId }}</td>
       </ng-container>
 
       <!-- Name Column -->
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Name</th>
         <td mat-cell *matCellDef="let element">{{ element.name }}</td>
       </ng-container>
 
       <!-- Sign Date Column -->
       <ng-container matColumnDef="signDate">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Sign Date</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="signDate">
+          Sign Date
+        </th>
         <td mat-cell *matCellDef="let element">{{ element.signDate }}</td>
       </ng-container>
 
       <!-- Status Column -->
       <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="status">
+          Status
+        </th>
         <td mat-cell *matCellDef="let element">
           <span
             class="status-badge"
