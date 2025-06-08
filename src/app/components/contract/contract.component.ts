@@ -202,32 +202,17 @@ export class ContractComponent {
 
   // Add method to export to Excel
   exportToExcel(): void {
-    const visibleColumns = this.displayedColumns.filter(
-      (column) => column !== 'select' && column !== 'actions'
+    // Define ordered columns - ensure contractId is first
+    const orderedColumns = ['contractId', 'name', 'signDate', 'status'];
+    // Filter out select and actions columns
+    const visibleColumns = orderedColumns.filter(
+      (column) =>
+        this.displayedColumns.includes(column) &&
+        column !== 'select' &&
+        column !== 'actions'
     );
 
-    const data = this.dataSource.data.map((item: Contract) => {
-      const exportItem: Record<string, string | number | Date> = {};
-
-      visibleColumns.forEach((column) => {
-        const value = item[column as keyof Contract];
-
-        if (column === 'status') {
-          exportItem[column] = this.getStatusLabel(value as string);
-        } else if (column === 'signDate') {
-          exportItem[column] = value ? new Date(value).toLocaleString() : '';
-        } else if (column === 'contractId') {
-          // Ensure contractId is used instead of numeric id
-          exportItem[column] = item.contractId || '';
-        } else {
-          exportItem[column] = value;
-        }
-      });
-
-      return exportItem;
-    });
-
-    // Create column headers
+    // Create headers first
     const headers = visibleColumns.map((column) => {
       const headerMap: Record<string, string> = {
         contractId: 'Contract ID',
@@ -240,21 +225,37 @@ export class ContractComponent {
       );
     });
 
-    // Create worksheet
-    const worksheet = XLSX.utils.json_to_sheet(data, {
-      header: visibleColumns,
+    // Map data for export
+    const data = this.dataSource.data.map((item: Contract) => {
+      const exportItem: Record<string, any> = {};
+      visibleColumns.forEach((column) => {
+        if (column === 'status') {
+          exportItem[column] = this.getStatusLabel(item[column] as string);
+        } else if (column === 'signDate') {
+          exportItem[column] = item[column]
+            ? new Date(item[column] as string).toLocaleString()
+            : '';
+        } else {
+          exportItem[column] = item[column];
+        }
+      });
+      return exportItem;
+    });
+
+    // Create worksheet with headers first
+    const ws = XLSX.utils.aoa_to_sheet([headers]);
+
+    // Append data starting from second row
+    XLSX.utils.sheet_add_json(ws, data, {
+      origin: 'A2',
       skipHeader: true,
     });
 
-    // Add headers to worksheet
-    XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+    // Create workbook and save
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Contracts');
 
-    // Create workbook
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Contracts');
-
-    // Generate Excel file
     const fileName = `contracts_${new Date().toISOString().split('T')[0]}.xlsx`;
-    XLSX.writeFile(workbook, fileName);
+    XLSX.writeFile(wb, fileName);
   }
 }

@@ -101,3 +101,50 @@
     </div>
   </mat-card-content>
 </mat-card>
+
+<div class="row">
+  <!-- Action Logs Card -->
+  <div class="col-sm-12">
+    <mat-card class="cardWithShadow">
+      <mat-card-content>
+        <h4 class="mb-3">Action Logs</h4>
+        <div class="table-responsive">
+          <table mat-table [dataSource]="actionLogsDataSource" class="w-100">
+            <!-- Action Log ID Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>Action Log ID</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.id }}
+              </td>
+            </ng-container>
+
+            <!-- Type Column -->
+            <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef>Type</th>
+              <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+            </ng-container>
+
+            <!-- Created At Column -->
+            <ng-container matColumnDef="createdAt">
+              <th mat-header-cell *matHeaderCellDef>Created At</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.createdAt | date : "medium" }}
+              </td>
+            </ng-container>
+
+            <!-- Created By Column -->
+            <ng-container matColumnDef="createdBy">
+              <th mat-header-cell *matHeaderCellDef>Created By</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.createdBy }}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="actionLogColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: actionLogColumns"></tr>
+          </table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,3 +1,4 @@
+import { ActionLog } from './ActionLog';
 import { Item } from './Item';
 
 export interface Contract {
@@ -7,5 +8,6 @@ export interface Contract {
   signDate?: string;
   status?: 'LIQUIDATED' | 'UNLIQUIDATED';
   items?: Item[];
+  actionLogs?: ActionLog[];
   [key: string]: any;
 }

@@ -3,9 +3,10 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VndCurrencyPipe } from 'src/app/config/pipe/vnd-currency.pipe';
+import { ActionLog } from 'src/app/models/interfaces/ActionLog';
 
 import { Contract } from 'src/app/models/interfaces/Contract';
 import { ContractService } from 'src/app/services/contracts/contract.service';
@@ -29,6 +30,8 @@ export class ContractViewComponent {
   taxRate: number = 10;
   loading = false;
   error: string | null = null;
+  actionLogsDataSource = new MatTableDataSource<ActionLog>([]);
+  actionLogColumns: string[] = ['id', 'type', 'createdAt', 'createdBy'];
 
   constructor(
     private route: ActivatedRoute,
@@ -50,6 +53,9 @@ export class ContractViewComponent {
         if (response.statusCode === 200 && response.data) {
           this.contract = response.data;
           // No need to map items since API response matches our interface
+          if (response.data.actionLogs) {
+            this.actionLogsDataSource.data = response.data.actionLogs;
+          }
         }
       },
       error: (error) => {
