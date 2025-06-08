@@ -6,29 +6,73 @@ Modernize Angular Admin Dashboard
 
 ### Create Contract
 
-- **Endpoint:** `POST /api/v1/contracts`
-- **Description:** Create a new contract with items
-- **Request Body:** Contract object with items array
-- **Example Request:**
-  ```json
-  {
-    "contractId": "HD001",
-    "name": "Office Equipment Supply Contract",
-    "signDate": "2024-01-10T09:00:00Z",
-    "status": "UNLIQUIDATED",
-    "items": [
-      {
-        "itemId": "VT001",
-        "name": "A4 Paper",
-        "unit": "Ream",
-        "quantity": 100,
-        "price": 50.0
-      }
-    ]
-  }
-  ```
-- **Response:** Created contract object
+#### Endpoint
+
+- **URL:** `/api/v1/contracts`
+- **Method:** `POST`
+- **Description:** Create a new contract with items and optional file attachments
+
+#### Request
+
+- **Content-Type:** `multipart/form-data`
+
+##### Request Body
+
+```json
+{
+  "contractId": "HD001",
+  "name": "Contract Name",
+  "signDate": "2024-01-10 09:00:00",
+  "items": [
+    {
+      "itemId": "IT001",
+      "name": "Item Name",
+      "unit": "Piece",
+      "quantity": 100,
+      "unitPrice": 50.0
+    }
+  ]
+}
+```
+
+##### Files Upload
+
+- **Parameter Name:** `files`
+- **Required:** No
+- **Type:** `List<MultipartFile>`
+- **Allowed Extensions:** pdf, jpg, jpeg, png, doc, docx
+
+#### Response
+
 - **Status Code:** 201 (Created)
+- **Content-Type:** `application/json`
+- **Body:** Created Contract object
+
+#### Error Responses
+
+- `400 Bad Request`: Invalid contract data
+- `409 Conflict`: Contract ID already exists
+- `415 Unsupported Media Type`: Invalid file type
+- `500 Internal Server Error`: Server processing error
+
+#### Example Using Postman
+
+```http
+POST /api/v1/contracts
+Content-Type: multipart/form-data
+
+// Form Data
+contract: { ... contract JSON ... }
+files: [file1.pdf, file2.jpg]
+```
+
+#### Notes
+
+- Contract ID must be unique
+- Files will be stored and linked to the contract
+- All operations are transactional
+- Contract status will be set to UNLIQUIDATED by default
+- Each file will be assigned a unique ID based on contract ID and timestamp
 
 ### Update Contract
 

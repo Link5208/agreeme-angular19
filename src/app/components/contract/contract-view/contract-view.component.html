@@ -90,6 +90,16 @@
         <!-- Header and Row Definitions -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+        <!-- No Data Row -->
+        <tr class="mat-row" *matNoDataRow>
+          <td
+            class="mat-cell text-center"
+            [attr.colspan]="displayedColumns.length"
+          >
+            No items available
+          </td>
+        </tr>
       </table>
     </div>
 
@@ -101,6 +111,79 @@
     </div>
   </mat-card-content>
 </mat-card>
+
+<!-- filepath: d:\OneDrive - Hanoi University of Science and Technology\Workspace\contract_management\modernize-free-angular-v4\src\app\components\contract\contract-view\contract-view.component.html -->
+
+<!-- Files Card -->
+<div class="row mt-4">
+  <div class="col-sm-12">
+    <mat-card class="cardWithShadow">
+      <mat-card-content>
+        <h4 class="mb-3">Contract Files</h4>
+        <div class="table-responsive">
+          <table mat-table [dataSource]="filesDataSource" class="w-100">
+            <!-- File Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef class="f-s-15 f-w-600">
+                File Name
+              </th>
+              <td mat-cell *matCellDef="let file">{{ file.name }}</td>
+            </ng-container>
+
+            <!-- File Type Column -->
+            <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef class="f-s-15 f-w-600">
+                Type
+              </th>
+              <td mat-cell *matCellDef="let file">{{ file.type }}</td>
+            </ng-container>
+
+            <!-- File Size Column -->
+            <ng-container matColumnDef="size">
+              <th mat-header-cell *matHeaderCellDef class="f-s-15 f-w-600">
+                Size
+              </th>
+              <td mat-cell *matCellDef="let file">
+                {{ formatFileSize(file.size) }}
+              </td>
+            </ng-container>
+
+            <!-- Created At Column -->
+            <ng-container matColumnDef="createdAt">
+              <th mat-header-cell *matHeaderCellDef class="f-s-15 f-w-600">
+                Uploaded At
+              </th>
+              <td mat-cell *matCellDef="let file">
+                {{ file.createdAt | date : "medium" }}
+              </td>
+            </ng-container>
+
+            <!-- Created By Column -->
+            <ng-container matColumnDef="createdBy">
+              <th mat-header-cell *matHeaderCellDef class="f-s-15 f-w-600">
+                Uploaded By
+              </th>
+              <td mat-cell *matCellDef="let file">{{ file.createdBy }}</td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="fileColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: fileColumns"></tr>
+
+            <!-- No Data Row -->
+            <tr class="mat-row" *matNoDataRow>
+              <td
+                class="mat-cell text-center"
+                [attr.colspan]="fileColumns.length"
+              >
+                No files available
+              </td>
+            </tr>
+          </table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
 
 <div class="row">
   <!-- Action Logs Card -->

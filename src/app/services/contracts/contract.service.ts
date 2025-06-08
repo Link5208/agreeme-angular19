@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { ApiResponse } from 'src/app/models/interfaces/ApiResponse';
@@ -38,15 +38,30 @@ export class ContractService {
     );
   }
 
-  createContract(request: Contract): Observable<ApiResponse<any>> {
-    return this.http.post<ApiResponse<any>>(`${this.apiUrl}`, request).pipe(
-      tap((response) => console.log('Create contract response:', response)),
-      catchError((error) => {
-        console.error('Create contract error:', error);
-        return throwError(() => error);
+  createContract(
+    contractData: any,
+    files: File[]
+  ): Observable<ApiResponse<any>> {
+    const formData = new FormData();
+
+    // Add contract data
+    formData.append(
+      'contract',
+      new Blob([JSON.stringify(contractData)], {
+        type: 'application/json',
       })
     );
+
+    // Add files with encoded filenames
+    files.forEach((file) => {
+      const encodedFileName = file.name.replace(/\s/g, '%20');
+      formData.append('files', file, encodedFileName);
+    });
+
+    // Let the browser set the Content-Type header with the correct boundary
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}`, formData);
   }
+
   updateContractStatus(request: {
     id: number;
     status: string;

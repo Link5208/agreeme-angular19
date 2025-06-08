@@ -1,4 +1,5 @@
 import { ActionLog } from './ActionLog';
+import { FileInfo } from './FileInfo';
 import { Item } from './Item';
 
 export interface Contract {
@@ -9,5 +10,6 @@ export interface Contract {
   status?: 'LIQUIDATED' | 'UNLIQUIDATED';
   items?: Item[];
   actionLogs?: ActionLog[];
+  files?: FileInfo[];
   [key: string]: any;
 }

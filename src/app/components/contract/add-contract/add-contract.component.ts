@@ -25,8 +25,8 @@ import {
 import * as moment from 'moment';
 import { VndCurrencyPipe } from 'src/app/config/pipe/vnd-currency.pipe';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Contract } from 'src/app/models/interfaces/Contract';
 import { Item } from 'src/app/models/interfaces/Item';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
 // Custom date formats
 export const MY_FORMATS = {
@@ -55,6 +55,7 @@ export const MY_FORMATS = {
     MatDatepickerModule,
     VndCurrencyPipe,
     MatProgressSpinnerModule,
+    NgxDropzoneModule,
   ],
   templateUrl: './add-contract.component.html',
   styleUrl: './add-contract.component.scss',
@@ -90,6 +91,12 @@ export class AddContractComponent {
         });
       });
     });
+  }
+
+  files: File[] = [];
+
+  removeFile(index: number) {
+    this.files.splice(index, 1);
   }
 
   createForm() {
@@ -166,11 +173,10 @@ export class AddContractComponent {
       this.loading = true;
       const formValue = this.contractForm.getRawValue();
 
-      const request = {
+      const contractData = {
         contractId: formValue.contractId,
         name: formValue.name,
         signDate: moment(formValue.signDate).format('YYYY-MM-DD HH:mm:ss'),
-        status: 'UNLIQUIDATED',
         items: formValue.items.map((item: Item) => ({
           itemId: `VT${Math.floor(Math.random() * 900) + 100}`,
           name: item.name,
@@ -178,22 +184,51 @@ export class AddContractComponent {
           quantity: Number(item.quantity),
           price: Number(item.price),
         })),
-      } as const;
+      };
 
-      this.contractService.createContract(request).subscribe({
+      this.contractService.createContract(contractData, this.files).subscribe({
         next: (response) => {
           if (response.statusCode === 201) {
             this.router.navigate(['/contract']);
           }
         },
         error: (error) => {
-          console.error('Error creating contract:', error);
+          if (error.status === 415) {
+            console.error('Unsupported Media Type - Check file types');
+          } else {
+            console.error('Error creating contract:', error);
+          }
+          this.loading = false;
         },
         complete: () => {
           this.loading = false;
         },
       });
     }
+  }
+
+  // Add file validation method
+  validateFile(file: File): boolean {
+    const allowedTypes = [
+      'application/pdf',
+      'image/jpeg',
+      'image/jpg',
+      'image/png',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ];
+    return allowedTypes.includes(file.type);
+  }
+
+  // Update file change handler with validation
+  onFileChange(event: any) {
+    const validFiles = event.addedFiles.filter((file: File) =>
+      this.validateFile(file)
+    );
+    if (validFiles.length !== event.addedFiles.length) {
+      console.error('Some files were rejected due to invalid type');
+    }
+    this.files.push(...validFiles);
   }
 
   getTimeString(): string {

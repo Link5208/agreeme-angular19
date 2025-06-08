@@ -3,12 +3,15 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VndCurrencyPipe } from 'src/app/config/pipe/vnd-currency.pipe';
 import { ActionLog } from 'src/app/models/interfaces/ActionLog';
 
 import { Contract } from 'src/app/models/interfaces/Contract';
+import { FileInfo } from 'src/app/models/interfaces/FileInfo';
 import { ContractService } from 'src/app/services/contracts/contract.service';
 
 @Component({
@@ -20,6 +23,8 @@ import { ContractService } from 'src/app/services/contracts/contract.service';
     MatDividerModule,
     MatTableModule,
     VndCurrencyPipe,
+    MatIconModule,
+    MatTooltipModule,
   ],
   templateUrl: './contract-view.component.html',
   styleUrl: './contract-view.component.scss',
@@ -32,6 +37,9 @@ export class ContractViewComponent {
   error: string | null = null;
   actionLogsDataSource = new MatTableDataSource<ActionLog>([]);
   actionLogColumns: string[] = ['id', 'type', 'createdAt', 'createdBy'];
+
+  filesDataSource = new MatTableDataSource<FileInfo>();
+  fileColumns: string[] = ['name', 'type', 'size', 'createdAt', 'createdBy'];
 
   constructor(
     private route: ActivatedRoute,
@@ -56,6 +64,9 @@ export class ContractViewComponent {
           if (response.data.actionLogs) {
             this.actionLogsDataSource.data = response.data.actionLogs;
           }
+          if (response.data.files) {
+            this.filesDataSource.data = response.data.files;
+          }
         }
       },
       error: (error) => {
@@ -66,6 +77,15 @@ export class ContractViewComponent {
         this.loading = false;
       },
     });
+  }
+
+  // Add helper method to format file size
+  formatFileSize(bytes: number): string {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }
 
   calculateSubTotal(): number {

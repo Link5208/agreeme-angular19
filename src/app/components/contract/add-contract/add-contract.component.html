@@ -224,3 +224,58 @@
     </form>
   </mat-card-content>
 </mat-card>
+
+<!-- File Upload Card -->
+<mat-card class="cardWithShadow mt-4">
+  <mat-card-content>
+    <h4 class="m-b-24">Media</h4>
+
+    <ngx-dropzone
+      (change)="onFileChange($event)"
+      [accept]="'.pdf,.jpg,.jpeg,.png,.doc,.docx'"
+      [multiple]="true"
+      class="custom-dropzone"
+    >
+      >
+      <ngx-dropzone-label>
+        <div
+          class="dropzone-content d-flex align-items-center justify-content-center flex-col"
+        >
+          <img
+            src="assets/images/products/upload.png"
+            alt="Upload"
+            width="80"
+            class="upload-icon m-b-16"
+          />
+          <p class="headline">Drop or select file</p>
+          <p class="subtext f-s-14">
+            Drop files here or click to
+            <span class="browse-link text-primary">browse</span>
+            through your machine.
+          </p>
+        </div>
+      </ngx-dropzone-label>
+    </ngx-dropzone>
+
+    <!-- File List -->
+    <div *ngIf="files.length > 0" class="mt-4">
+      <div class="f-s-14 f-w-600 m-b-8">Files:</div>
+      <div class="file-list">
+        <div
+          *ngFor="let file of files; let i = index"
+          class="file-item d-flex align-items-center justify-content-between p-2"
+        >
+          <span>{{ file.name }}</span>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="removeFile(i)"
+            type="button"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
