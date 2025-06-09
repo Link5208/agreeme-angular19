@@ -63,26 +63,37 @@
             <mat-label>Sign Date</mat-label>
             <input
               matInput
-              [matDatepicker]="picker"
+              [matDatepicker]="signDatePicker"
               formControlName="signDate"
-              placeholder="Choose date"
+              placeholder="Choose sign date"
             />
             <mat-datepicker-toggle
               matSuffix
-              [for]="picker"
+              [for]="signDatePicker"
             ></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
+            <mat-datepicker #signDatePicker></mat-datepicker>
           </mat-form-field>
         </div>
+
         <div class="col-sm-6">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Time</mat-label>
+            <mat-label>Liquidation Date</mat-label>
             <input
               matInput
-              type="time"
-              (change)="updateDateTime($event)"
-              [value]="getTimeString()"
+              [matDatepicker]="liquidationDatePicker"
+              formControlName="liquidationDate"
+              placeholder="Choose liquidation date"
             />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="liquidationDatePicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #liquidationDatePicker></mat-datepicker>
+            <mat-error
+              *ngIf="contractForm.get('liquidationDate')?.errors?.['required']"
+            >
+              Liquidation date is required
+            </mat-error>
           </mat-form-field>
         </div>
 

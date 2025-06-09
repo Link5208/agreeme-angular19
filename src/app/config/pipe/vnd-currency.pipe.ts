@@ -10,7 +10,7 @@ export class VndCurrencyPipe implements PipeTransform {
     }
 
     // Multiply by 1000 and format with Vietnamese locale
-    const amount = (value * 1000).toLocaleString('vi-VN', {
+    const amount = value.toLocaleString('vi-VN', {
       maximumFractionDigits: 0,
       minimumFractionDigits: 0,
     });

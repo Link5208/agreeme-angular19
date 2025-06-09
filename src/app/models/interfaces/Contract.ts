@@ -7,6 +7,7 @@ export interface Contract {
   contractId?: string;
   name?: string;
   signDate?: string;
+  liquidationDate?: string;
   status?: 'LIQUIDATED' | 'UNLIQUIDATED';
   items?: Item[];
   actionLogs?: ActionLog[];

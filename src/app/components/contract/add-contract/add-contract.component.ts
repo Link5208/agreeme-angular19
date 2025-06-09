@@ -31,10 +31,10 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 // Custom date formats
 export const MY_FORMATS = {
   parse: {
-    dateInput: 'DD/MM/YYYY HH:mm:ss',
+    dateInput: 'DD/MM/YYYY ',
   },
   display: {
-    dateInput: 'DD/MM/YYYY HH:mm:ss',
+    dateInput: 'DD/MM/YYYY ',
     monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY',
@@ -104,6 +104,7 @@ export class AddContractComponent {
       contractId: [this.contractId, Validators.required],
       name: ['', Validators.required],
       signDate: [moment(), Validators.required],
+      liquidationDate: [moment(), Validators.required],
       status: ['UNLIQUIDATED', Validators.required],
       items: this.fb.array([]),
     });
@@ -176,7 +177,10 @@ export class AddContractComponent {
       const contractData = {
         contractId: formValue.contractId,
         name: formValue.name,
-        signDate: moment(formValue.signDate).format('YYYY-MM-DD HH:mm:ss'),
+        signDate: moment(formValue.signDate).format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
+        liquidationDate: moment(formValue.liquidationDate).format(
+          'YYYY-MM-DDTHH:mm:ss.SSSZ'
+        ),
         items: formValue.items.map((item: Item) => ({
           itemId: `VT${Math.floor(Math.random() * 900) + 100}`,
           name: item.name,
@@ -231,31 +235,12 @@ export class AddContractComponent {
     this.files.push(...validFiles);
   }
 
-  getTimeString(): string {
-    const date = this.contractForm.get('signDate')?.value;
-    if (date) {
-      return moment(date).format('HH:mm');
-    }
-    return '';
-  }
-
   calculateTotal(): number {
     return this.items.controls.reduce((sum, item) => {
       const quantity = item.get('quantity')?.value || 0;
       const price = item.get('price')?.value || 0;
       return sum + quantity * price;
     }, 0);
-  }
-  updateDateTime(event: any) {
-    const timeStr = event.target.value;
-    const currentDate = this.contractForm.get('signDate')?.value;
-    if (currentDate && timeStr) {
-      const [hours, minutes] = timeStr.split(':');
-      const newDate = moment(currentDate)
-        .set('hours', parseInt(hours))
-        .set('minutes', parseInt(minutes));
-      this.contractForm.get('signDate')?.setValue(newDate);
-    }
   }
 
   calculateItemTotal(index: number): number {

@@ -4,7 +4,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import {
@@ -47,6 +47,7 @@ import {
     MatInputModule,
     MatMenuModule,
     ReactiveFormsModule,
+    DatePipe,
   ],
   templateUrl: './contract.component.html',
   styleUrl: './contract.component.scss',
@@ -220,6 +221,11 @@ export class ContractComponent implements OnInit {
     { def: 'contractId', label: 'ID', show: true },
     { def: 'name', label: 'Name', show: true },
     { def: 'signDate', label: 'Sign Date', show: true },
+    {
+      def: 'liquidationDate',
+      label: 'Liquidation Date',
+      show: true,
+    },
     { def: 'status', label: 'Status', show: true },
     { def: 'actions', label: 'Actions', show: true },
   ];

@@ -151,7 +151,19 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header="signDate">
           Sign Date
         </th>
-        <td mat-cell *matCellDef="let element">{{ element.signDate }}</td>
+        <td mat-cell *matCellDef="let element">
+          {{ element.signDate | date : "yyyy-MM-dd" }}
+        </td>
+      </ng-container>
+
+      <!-- Liquidation Date Column -->
+      <ng-container matColumnDef="liquidationDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="liquidationDate">
+          Liquidation Date
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.liquidationDate | date : "yyyy-MM-dd" }}
+        </td>
       </ng-container>
 
       <!-- Status Column -->
