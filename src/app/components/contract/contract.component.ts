@@ -267,7 +267,13 @@ export class ContractComponent implements OnInit {
   // Add method to export to Excel
   exportToExcel(): void {
     // Define ordered columns - ensure contractId is first
-    const orderedColumns = ['contractId', 'name', 'signDate', 'status'];
+    const orderedColumns = [
+      'contractId',
+      'name',
+      'signDate',
+      'liquidationDate',
+      'status',
+    ];
     // Filter out select and actions columns
     const visibleColumns = orderedColumns.filter(
       (column) =>
@@ -282,6 +288,7 @@ export class ContractComponent implements OnInit {
         contractId: 'Contract ID',
         name: 'Contract Name',
         signDate: 'Sign Date',
+        liquidationDate: 'Liquidation Date',
         status: 'Status',
       };
       return (
@@ -295,9 +302,14 @@ export class ContractComponent implements OnInit {
       visibleColumns.forEach((column) => {
         if (column === 'status') {
           exportItem[column] = this.getStatusLabel(item[column] as string);
-        } else if (column === 'signDate') {
-          exportItem[column] = item[column]
-            ? new Date(item[column] as string).toLocaleString()
+        } else if (column === 'signDate' || column === 'liquidationDate') {
+          // Format both date fields consistently as YYYY-MM-DD
+          const date = new Date(item[column] as string);
+          exportItem[column] = date
+            ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+                2,
+                '0'
+              )}-${String(date.getDate()).padStart(2, '0')}`
             : '';
         } else {
           exportItem[column] = item[column];
