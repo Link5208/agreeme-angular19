@@ -39,7 +39,14 @@ export class ContractViewComponent {
   actionLogColumns: string[] = ['id', 'type', 'createdAt', 'createdBy'];
 
   filesDataSource = new MatTableDataSource<FileInfo>();
-  fileColumns: string[] = ['name', 'type', 'size', 'createdAt', 'createdBy'];
+  fileColumns: string[] = [
+    'name',
+    'type',
+    'size',
+    'createdAt',
+    'createdBy',
+    'actions',
+  ];
 
   constructor(
     private route: ActivatedRoute,
