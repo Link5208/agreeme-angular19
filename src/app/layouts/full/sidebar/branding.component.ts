@@ -7,8 +7,10 @@ import { CoreService } from 'src/app/services/core.service';
   template: `
     <a href="/" class="logodark">
       <img
-        src="./assets/images/logos/dark-logo.svg"
+        src="./assets/images/logos/vtit-logo.webp"
         class="align-middle m-2"
+        width="120"
+        height="auto"
         alt="logo"
       />
     </a>

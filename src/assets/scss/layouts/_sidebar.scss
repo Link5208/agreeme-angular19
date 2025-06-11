@@ -12,6 +12,7 @@
 
 .branding {
   padding: 20px;
+  margin-left: 50px;
 }
 
 .sidebar-list {
@@ -35,7 +36,6 @@
       &:focus {
         z-index: -1;
       }
-
 
       .item-chip {
         height: 18px;

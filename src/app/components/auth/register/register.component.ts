@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router, RouterModule } from '@angular/router';
+import { BrandingComponent } from 'src/app/layouts/full/sidebar/branding.component';
 import { RegisterRequest } from 'src/app/models/interfaces/Auth';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
@@ -26,6 +27,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
     MatButtonModule,
     MatProgressSpinnerModule,
     RouterModule,
+    BrandingComponent,
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
