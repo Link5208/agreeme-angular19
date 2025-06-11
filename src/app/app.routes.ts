@@ -15,11 +15,6 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       {
-        path: 'dashboard',
-        loadChildren: () =>
-          import('./pages/pages.routes').then((m) => m.PagesRoutes),
-      },
-      {
         path: 'contract',
         loadComponent: () =>
           import('./components/contract/contract.component').then(
@@ -45,18 +40,6 @@ export const routes: Routes = [
         path: 'contract/view/:id',
         component: ContractViewComponent,
       },
-      {
-        path: 'ui-components',
-        loadChildren: () =>
-          import('./pages/ui-components/ui-components.routes').then(
-            (m) => m.UiComponentsRoutes
-          ),
-      },
-      {
-        path: 'extra',
-        loadChildren: () =>
-          import('./pages/extra/extra.routes').then((m) => m.ExtraRoutes),
-      },
     ],
   },
   {
@@ -75,7 +58,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'contract',
     pathMatch: 'full',
   },
   {

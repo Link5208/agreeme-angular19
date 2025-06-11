@@ -297,7 +297,12 @@ export class ContractComponent implements OnInit {
     });
 
     // Map data for export
-    const data = this.selection.selected.map((item: Contract) => {
+    const sourceData =
+      this.selection.selected.length > 0
+        ? this.selection.selected
+        : this.dataSource.data;
+
+    const data = sourceData.map((item: Contract) => {
       const exportItem: Record<string, any> = {};
       visibleColumns.forEach((column) => {
         if (column === 'status') {
