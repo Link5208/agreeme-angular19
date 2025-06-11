@@ -13,6 +13,7 @@ import * as XLSX from 'xlsx';
 import { Contract } from 'src/app/models/interfaces/Contract';
 import { FileInfo } from 'src/app/models/interfaces/FileInfo';
 import { ContractService } from 'src/app/services/contracts/contract.service';
+import { FileService } from 'src/app/services/file/file.service';
 
 @Component({
   selector: 'app-contract-view',
@@ -51,7 +52,8 @@ export class ContractViewComponent {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private contractService: ContractService
+    private contractService: ContractService,
+    private fileService: FileService
   ) {}
 
   ngOnInit() {
@@ -60,6 +62,24 @@ export class ContractViewComponent {
     if (id) {
       this.loadContract(id);
     }
+  }
+  downloadFile(file: any) {
+    // Assuming you have a service method to handle downloads
+    this.fileService.downloadFile(this.contract?.id, file.id).subscribe({
+      next: (response: any) => {
+        const blob = new Blob([response], { type: file.type });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = file.name;
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (error) => {
+        console.error('Error downloading file:', error);
+        // Handle error (show message, etc.)
+      },
+    });
   }
 
   loadContract(id: string) {
