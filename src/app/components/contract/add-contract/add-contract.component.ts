@@ -74,6 +74,7 @@ export class AddContractComponent {
   taxRate: number = 10;
   contractService = inject(ContractService);
   loading = false;
+  files: File[] = [];
 
   constructor(private fb: FormBuilder, private router: Router) {
     this.createForm();
@@ -93,7 +94,10 @@ export class AddContractComponent {
     });
   }
 
-  files: File[] = [];
+  // Add getter for easy form access
+  get items() {
+    return this.contractForm.get('items') as FormArray;
+  }
 
   removeFile(index: number) {
     this.files.splice(index, 1);
@@ -123,11 +127,6 @@ export class AddContractComponent {
       price: [0, [Validators.required, Validators.min(0)]],
       total: [{ value: 0, disabled: true }],
     });
-  }
-
-  // Add getter for easy form access
-  get items() {
-    return this.contractForm.get('items') as FormArray;
   }
 
   // Add method to check individual control validity

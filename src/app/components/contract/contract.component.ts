@@ -60,7 +60,28 @@ export class ContractComponent implements OnInit {
   pageSize = 5;
   pageSizeOptions: number[] = [5, 10, 25];
   searchControl = new FormControl('');
+  totalContracts: number = 0;
+  selection = new SelectionModel<any>(true, []);
+  inProgressContracts: number = 0;
+  liqidatedContracts: number = 0;
+  pendingContracts: number = 0;
 
+  // Add column definitions with display names
+  columnDefinitions = [
+    { def: 'select', label: 'Select', show: true },
+    { def: 'contractId', label: 'ID', show: true },
+    { def: 'name', label: 'Name', show: true },
+    { def: 'signDate', label: 'Sign Date', show: true },
+    {
+      def: 'liquidationDate',
+      label: 'Liquidation Date',
+      show: true,
+    },
+    { def: 'status', label: 'Status', show: true },
+    { def: 'actions', label: 'Actions', show: true },
+  ];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   // Track current sort state
@@ -68,6 +89,24 @@ export class ContractComponent implements OnInit {
     active: '',
     direction: '',
   };
+
+  constructor(
+    private contractService: ContractService,
+    private router: Router
+  ) {
+    this.dataSource = new MatTableDataSource<Contract>([]);
+  }
+
+  ngOnInit() {
+    this.searchControl.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe(() => {
+        this.onSearch();
+      });
+
+    this.loadContracts();
+  }
+
   onSearch(): void {
     const searchTerm = this.searchControl.value;
     let filter = '';
@@ -115,37 +154,19 @@ export class ContractComponent implements OnInit {
       });
     }
   }
+
   viewContract(contract: Contract) {
     this.router.navigate(['/contract/view', contract.id]);
   }
+
   editContract(contract: Contract) {
     this.router.navigate(['/contract/edit', contract.id]);
   }
+
   openAddDialog() {
     this.router.navigate(['/contract/add']);
   }
 
-  totalContracts: number = 0;
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  constructor(
-    private contractService: ContractService,
-    private router: Router,
-    private fb: FormBuilder
-  ) {
-    this.dataSource = new MatTableDataSource<Contract>([]);
-  }
-
-  ngOnInit() {
-    this.searchControl.valueChanges
-      .pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe(() => {
-        this.onSearch();
-      });
-
-    this.loadContracts();
-  }
   ngAfterViewInit() {
     // Listen for sort changes
     this.sort.sortChange.subscribe(() => {
@@ -208,27 +229,6 @@ export class ContractComponent implements OnInit {
     // TODO: Show error message to user (e.g., using MatSnackBar)
     console.error(errorMessage);
   }
-
-  selection = new SelectionModel<any>(true, []);
-
-  inProgressContracts: number = 0;
-  liqidatedContracts: number = 0;
-  pendingContracts: number = 0;
-
-  // Add column definitions with display names
-  columnDefinitions = [
-    { def: 'select', label: 'Select', show: true },
-    { def: 'contractId', label: 'ID', show: true },
-    { def: 'name', label: 'Name', show: true },
-    { def: 'signDate', label: 'Sign Date', show: true },
-    {
-      def: 'liquidationDate',
-      label: 'Liquidation Date',
-      show: true,
-    },
-    { def: 'status', label: 'Status', show: true },
-    { def: 'actions', label: 'Actions', show: true },
-  ];
 
   // Update displayedColumns to be dynamic
   get displayedColumns(): string[] {

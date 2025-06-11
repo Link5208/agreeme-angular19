@@ -1,17 +1,18 @@
 .m-y-24 {
-  margin: 24px 0;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .m-b-24 {
-  margin-bottom: 24px;
+  margin-bottom: 2rem;
 }
 
 .m-b-16 {
-  margin-bottom: 16px;
+  margin-bottom: 1.5rem;
 }
 
 .m-t-24 {
-  margin-top: 24px;
+  margin-top: 2rem;
 }
 
 .m-t-16 {
@@ -51,24 +52,6 @@ mat-form-field {
       margin-bottom: 0; // Bỏ margin bottom cho row cuối cùng
     }
   }
-}
-
-// Các margin helpers
-.m-y-24 {
-  margin-top: 2rem !important;
-  margin-bottom: 2rem !important;
-}
-
-.m-b-24 {
-  margin-bottom: 2rem !important;
-}
-
-.m-b-16 {
-  margin-bottom: 1.5rem !important;
-}
-
-.m-t-24 {
-  margin-top: 2rem !important;
 }
 
 // Custom spacing cho form fields

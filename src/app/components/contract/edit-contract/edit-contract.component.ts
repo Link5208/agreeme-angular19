@@ -79,9 +79,11 @@ export class EditContractComponent {
       },
     });
   }
+
   calculateItemTotal(item: any): number {
     return item.quantity * item.price;
   }
+
   calculateSubTotal(): number {
     if (!this.contract?.items) return 0;
     return this.contract.items.reduce(
@@ -89,6 +91,7 @@ export class EditContractComponent {
       0
     );
   }
+
   onUpdate() {
     if (this.contractForm.valid && this.contract?.id) {
       this.loading = true;

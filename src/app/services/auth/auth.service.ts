@@ -81,8 +81,6 @@ export class AuthService {
     const token = this.getAccessToken();
     if (!token) return false;
 
-    // Add additional token validation if needed
-    // For example, check token expiration using JWT decode
     return true;
   }
 
