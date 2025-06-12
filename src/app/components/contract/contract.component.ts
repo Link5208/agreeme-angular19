@@ -62,9 +62,6 @@ export class ContractComponent implements OnInit {
   searchControl = new FormControl('');
   totalContracts: number = 0;
   selection = new SelectionModel<any>(true, []);
-  inProgressContracts: number = 0;
-  liqidatedContracts: number = 0;
-  pendingContracts: number = 0;
 
   // Add column definitions with display names
   columnDefinitions = [

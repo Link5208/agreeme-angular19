@@ -180,6 +180,7 @@ export class AddContractComponent {
         liquidationDate: moment(formValue.liquidationDate).format(
           'YYYY-MM-DDTHH:mm:ss.SSSZ'
         ),
+        status: formValue.status,
         items: formValue.items.map((item: Item) => ({
           itemId: `VT${Math.floor(Math.random() * 900) + 100}`,
           name: item.name,
