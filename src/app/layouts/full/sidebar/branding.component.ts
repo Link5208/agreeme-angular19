@@ -7,7 +7,7 @@ import { CoreService } from 'src/app/services/core.service';
   template: `
     <a href="/" class="logodark">
       <img
-        src="./assets/images/logos/vtit-logo.webp"
+        src="./assets/images/logos/Viettel_logo_2021.svg.png"
         class="align-middle m-2"
         width="120"
         height="auto"
